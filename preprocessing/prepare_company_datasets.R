@@ -1,5 +1,6 @@
 #libraries
 library(tidyverse)
+library(textclean)
 
 setwd("~/GitHub/twint/outputs")
 
@@ -129,7 +130,8 @@ df = rbind(vw, starbucks, hm, ikea, cocacola, shell, unilever, nestle, mcdonalds
 df = df[order(df$user_id, df$date, decreasing=TRUE),]
 df = df[!duplicated(df$tweet),]
 
-df = df %>% select(-c("conversation_id","created_at","timezone","name","place","language","cashtags","near","geo","source","user_rt_id","user_rt","retweet_id","retweet_date","translate","trans_src","trans_dest", "retweet"))
+df = df %>% select(-c("conversation_id","created_at","timezone","name","place","language","cashtags","near","geo","source","user_rt_id","user_rt","retweet_id","retweet_date","translate","trans_src","trans_dest", "retweet")) %>%
+  drop_empty_row()
 
 tweets = df %>% select(id, tweet)
 

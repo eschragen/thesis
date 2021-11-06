@@ -29,10 +29,10 @@ years = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analyti
 tweetsperday = years %>% left_join(tweetfrequencies, by = "date") 
 tweetsperday[is.na(tweetsperday)] = 0
 
-setDT(tweetsperday)[, sums := frollsum(n, 365)]
-
 ggplot(tweetsperday, aes(x = date, y = n)) + ggtitle("Tweet Frequencies") + geom_line(color = "#69b3a2", size = 1) +
   theme_ipsum()
+
+setDT(tweetsperday)[, sums := frollsum(n, 365)]
 
 #Which year period yields the most tweets?
 tweetsperday %>% filter(sums == max(sums, na.rm =T))
