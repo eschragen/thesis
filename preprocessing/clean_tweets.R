@@ -7,8 +7,8 @@ library(dplyr)
 library(ggplot2)
 
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
-tweets = read_csv("tweets")
-tweets = tweets %>% select(-X1) 
+df = read_csv("df")
+tweets = df %>% select(id, tweet) 
 
 #create subset of 1,000 tweets
 tweets_subset = tweets %>% sample_n(1000)
@@ -71,5 +71,5 @@ ord = order(freq, decreasing = TRUE)
 freq[head(ord, n = 20)]
 
 plot = data.frame(words = names(freq), count = freq)
-plot = subset(plot, plot$count > 20) #creating a subset of words having more than 100 frequency
+plot = subset(plot, plot$count > 30) #creating a subset of words having more than 100 frequency
 ggplot(data = plot, aes(words, count)) + geom_bar(stat = 'identity') + ggtitle('Words used more than 150 times')+coord_flip()
