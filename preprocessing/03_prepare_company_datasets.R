@@ -186,6 +186,11 @@ df = df[!duplicated(df$tweet),]
 df = df %>% select(-c("conversation_id","created_at","timezone","name","place","language","cashtags","near","geo","source","user_rt_id","user_rt","retweet_id","retweet_date","translate","trans_src","trans_dest", "retweet")) %>%
   drop_empty_row()
 
+#extract emojis
+df$tweet = gsub(">", "> ", df$tweet)          # Add whitespace after every ">"
+df$tweet = gsub("<", " <", df$tweet)          # Add whitespace before every "<"
+df$emojis = str_extract(df$tweet, "<[^>]+>")  # Create new column
+
 #save df and tweets
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
 write.csv(df, file = "df")
