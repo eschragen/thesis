@@ -49,7 +49,7 @@ clean_corpus = function(corpus){
   # corpus = tm_map(corpus, removeNumbers)
   # corpus = tm_map(corpus, content_transformer(tolower))
   corpus = tm_map(corpus, removeWords,c(stopwords("en"),"vw", "volkswagen", "shell", "starbucks", 
-                                       "nestle", "mcdonalds", "ikea", "hm", "exxonmobil", 
+                                       "nestle", "mcdonalds", "mc donald's", "ikea", "hm", "exxonmobil", 
                                        "coca cola", "unilever"))
   corpus = tm_map(corpus, stemDocument, language = "english") #tbd
   return(corpus)
@@ -57,19 +57,13 @@ clean_corpus = function(corpus){
 
 tweets_corpus_clean = clean_corpus(tweets_corpus)
 
+#get content of corpus
+# out = as.data.frame(sapply(tweets_corpus_clean, function(x){x$content}))
+# write.csv(out, file = "C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/corpus.csv")
+
 #create wordcloud
-set.seed(1234)
-palet  = brewer.pal(8, 'Dark2')
-wordcloud(tweets_corpus_clean, min.freq = 20, scale = c(4, 0.2) , random.order = TRUE, col = palet)
+# set.seed(1234)
+# palet  = brewer.pal(8, 'Dark2')
+# wordcloud(tweets_corpus_clean, min.freq = 20, scale = c(4, 0.2) , random.order = TRUE, col = palet)
 
-#prepare data for topic modeling: document-term matrix
-dtm = DocumentTermMatrix(tweets_corpus_clean)
 
-#show most frequent words
-freq = colSums(as.matrix(dtm))
-ord = order(freq, decreasing = TRUE)
-freq[head(ord, n = 20)]
-
-plot = data.frame(words = names(freq), count = freq)
-plot = subset(plot, plot$count > 30) #creating a subset of words having more than 100 frequency
-ggplot(data = plot, aes(words, count)) + geom_bar(stat = 'identity') + ggtitle('Words used more than 150 times')+coord_flip()
