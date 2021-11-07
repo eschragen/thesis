@@ -4,7 +4,7 @@ library(textclean)
 
 setwd("~/GitHub/twint/outputs")
 
-#determine sample size per company
+#determine sample size per company (equal sample size --> pick n of smallest: H&M)
 n = 4500
 
 ####PREPARE COMPANY DATASETS####
