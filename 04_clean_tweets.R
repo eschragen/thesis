@@ -9,10 +9,10 @@ library(textstem)
 
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
 df = read_csv("df")
-tweets = df %>% select(id, tweet) 
 
 #create subset of 1,000 tweets
-tweets_subset = tweets %>% sample_n(1000)
+df_subset = df %>% sample_n(1000)
+tweets_subset = df_subset %>% select(id, tweet) 
 
 #remove URL, mentions, emojis and hashtags
 tweets_subset$tweet = iconv(tweets_subset$tweet, to = "ASCII", sub = " ") #Remove non-ASCII characters
@@ -30,11 +30,15 @@ tweets_subset$tweet = tolower(tweets_subset$tweet) #Replace to lower words
 tweets_subset$tweet = replace_word_elongation(tweets_subset$tweet) #Replace word elongation
 tweets_subset$tweet = replace_contraction(tweets_subset$tweet) #Replace contraction
 
-#unique tweets
-tweets_unique = unique(tweets_subset$tweet)
+#remove rows with empty tweets
+tweets_subset[tweets_subset==""] = NA
+tweets_subset = tweets_subset[complete.cases(tweets_subset),]
+
+#remove duplicates
+tweets_subset = tweets_subset %>% mutate(duplicate = duplicated(tweet)) %>% filter(duplicate == FALSE)
 
 #create corpus
-tweets_corpus = VCorpus(VectorSource(tweets_unique))
+tweets_corpus = VCorpus(VectorSource(tweets_subset$tweet))
 
 clean_corpus = function(corpus){
   # corpus = tm_map(corpus, removePunctuation)
@@ -53,8 +57,10 @@ clean_corpus = function(corpus){
 tweets_corpus_clean = clean_corpus(tweets_corpus)
 
 #get content of corpus
-content = as.data.frame(t((sapply(tweets_corpus_clean, function(x){x$content}))))
-content = content %>% drop_empty_row()
+content = as.data.frame(t(sapply(tweets_corpus_clean, function(x){x$content})))
+content = cbind(tweets_subset[,1], content[,1])
+colnames(content) = c("id", "tweet")
+
 # rownames(content) = c(1:nrow(content))
 # content = content[,1]
 # write.csv(content, file = "C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/corpus.csv")
