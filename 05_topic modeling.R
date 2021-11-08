@@ -72,8 +72,8 @@ lda = LDA(dtm, k = 5, method = 'Gibbs',
 # "thin": number of omitted in-between Gibbs iterations:  prevent correlations between samples during the iteration
 
 #Top 10 terms or words under each topic
-top10terms = as.matrix(terms(lda,10))
-top10terms
+top20terms = as.matrix(terms(lda,20))
+top20terms
 
 #Topics found out by the model
 lda.topics = as.data.frame(topics(lda))
