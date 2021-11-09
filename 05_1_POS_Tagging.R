@@ -47,6 +47,7 @@
   
 
 ####OPTION 2: koRpus TREE TAGGING####
+options(scipen=999) #avoid scientific notations (e.g. e+18)
 library(koRpus)
 library(koRpus.lang.en)
 library(tidyverse)
@@ -63,30 +64,50 @@ text.tagged = treetag("C:\\Users\\eva_s\\OneDrive\\MASTER\\5. Semester_THESIS\\D
                       TT.options = list(path = "C:\\TreeTagger", preset = "en"))
 
 #Extract Speech Assignments
+options(scipen = 100)
 tags = text.tagged@tokens
-tags_df = tags %>% select(token, wclass) %>% filter(wclass == "noun" | wclass == "adjective" | wclass == "verb" | wclass == "number")
+tags_df = tags %>% select(token, wclass) 
+
+#Replace wrong word assignments for numbers
+tags_df$id = str_extract(tags_df$token, "[[:digit:]]+")  # Create new column for Digits
+
+#convert factor of word class to character
+tags_df$wclass = lapply(tags_df$wclass, as.character)
+
+for(i in 1:nrow(tags_df)){
+  if(!is.na(tags_df$id[i])){
+    tags_df$wclass[i] = "user_id"
+  }
+}
+
+#select word classes
+tags_df = tags_df %>%  filter(wclass == "noun" | wclass == "adjective" | wclass == "verb" | wclass == "user_id")
 
 #Loop: Prepare Spread (Goal: One line per ID) 
 count = 1
-id = 0
+user = 0
 for (i in 1:length(tags_df$wclass)) {
-  if(tags_df$wclass[i] != "number") {
+  if(tags_df$wclass[i] != "user_id") {
     tags_df$number[i] = count
     count = count + 1
-    tags_df$id[i] = id
+    tags_df$user[i] = user
   } else{
     count = 1
     tags_df$number[i]= count
     count = count + 1 
-    id = id + 1
-    tags_df$id[i] = id
+    user = user + 1
+    tags_df$user[i] = user
   }
 }
 
-tags_df_spread = tags_df %>% filter(wclass != "number") %>% select(-wclass) %>% group_by(id) %>% spread(number, token)
-tags_df_combine = tags_df_spread  %>% unite(tweet, sep =" ", remove = TRUE, na.rm = TRUE)
-tags_df_combine$tweet = gsub("[[:digit:]]+", "", tags_df_combine$tweet) #Remove numbers
+tags_df_spread = tags_df %>% select(-wclass, -id) %>% group_by(user) %>% spread(number, token) 
+tags_df_spread = tags_df_spread[,-1]
+content = tags_df_spread  %>% unite(tweet, sep =" ", remove = TRUE, na.rm = TRUE)
+
+#extract id
+content$id = str_extract(content$tweet, "[[:digit:]]+")  # Create new column
+content$tweet = gsub("[[:digit:]]+", "", content$tweet) #Remove numbers
 
 #Create corpus
-tweets_POS_corpus = VCorpus(VectorSource(tags_df_combine$tweet))
-dtm = DocumentTermMatrix(tweets_POS_corpus)
+tweets_POS_corpus = VCorpus(VectorSource(content$tweet))
+
