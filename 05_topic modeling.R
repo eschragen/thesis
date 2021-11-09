@@ -13,6 +13,9 @@ source("~/GitHub/thesis/04_clean_tweets.R")
 #prepare data for topic modeling: document-term matrix
 dtm = DocumentTermMatrix(tweets_corpus_clean)
 
+# #Run Topic Modeling with POS cleaned data
+# source("~/GitHub/thesis/05_1_POS_Tagging.R")
+
 ##Each row of the input matrix needs to contain at least one non-zero entry
 doc.length = apply(dtm, 1, sum)
 dtm = dtm[doc.length > 0,]
@@ -77,7 +80,7 @@ top20terms
 
 #Topics found out by the model
 lda.topics = as.data.frame(topics(lda))
-summary(as.factor(lda.topics))
+table(lda.topics)
 
 #Get probabilities for each topic / word
 topicprob = as.matrix(lda@gamma)
