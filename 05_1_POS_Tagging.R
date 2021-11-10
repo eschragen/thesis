@@ -111,3 +111,8 @@ content$tweet = gsub("[[:digit:]]+", "", content$tweet) #Remove numbers
 #Create corpus
 tweets_POS_corpus = VCorpus(VectorSource(content$tweet))
 
+#Apply Stemming / Lemmatization
+# tweets_corpus_stemmed = tm_map(tweets_POS_corpus, stemDocument)
+tweets_corpus_stemmed = tm_map(tweets_POS_corpus, lemmatize_strings)
+tweets_corpus_stemmed = tm_map(tweets_POS_corpus, PlainTextDocument)
+
