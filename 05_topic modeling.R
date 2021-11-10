@@ -8,24 +8,13 @@ library(ggplot2)
 library(textmineR)
 library(ldatuning)
 
+##Run Topic Modeling without POS cleaned data
 # source("~/GitHub/thesis/04_clean_tweets.R")
-
-# #Apply Word Stemming / Lemmatization
-# tweets_corpus_stemmed = tm_map(tweets_corpus_clean, stemDocument)
-# # #Or Lemmatization
-# # tweets_corpus_stemmed = tm_map(corpus, lemmatize_strings)
-# # tweets_corpus_stemmed = tm_map(corpus, PlainTextDocument)
-
-# #prepare data for topic modeling: document-term matrix
-# dtm = DocumentTermMatrix(tweets_corpus_stemmed)
 
 #Run Topic Modeling with POS cleaned data
 source("~/GitHub/thesis/05_1_POS_Tagging.R")
 
-#Apply Stemming / Lemmatization
-# tweets_corpus_stemmed = tm_map(tweets_POS_corpus, stemDocument)
-tweets_corpus_stemmed = tm_map(tweets_POS_corpus, lemmatize_strings)
-tweets_corpus_stemmed = tm_map(tweets_POS_corpus, PlainTextDocument)
+#Create Document Term Matrix
 dtm = DocumentTermMatrix(tweets_corpus_stemmed)
 
 ##Each row of the input matrix needs to contain at least one non-zero entry
