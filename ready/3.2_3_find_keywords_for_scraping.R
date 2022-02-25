@@ -4,10 +4,7 @@ library(dplyr)
 library(tm)
 library(qdap)
 
-#upload & combine csv files
-setwd("~/GitHub/twint/outputs")
-cocacola = read_csv("cocacola.csv")
-
+##run for every company seperately
 #cocacola
 #shell
 #vw
@@ -17,6 +14,10 @@ cocacola = read_csv("cocacola.csv")
 #mcdonalds
 #hm
 #exxonmobil
+
+#upload & combine csv files
+setwd("~/GitHub/twint/outputs")
+cocacola = read_csv("cocacola_greenwashing.csv")
 
 #extract unique tweets in English
 cocacola_tweets = cocacola %>%
@@ -32,8 +33,7 @@ clean_corpus = function(corpus){
   corpus = tm_map(corpus, stripWhitespace)
   corpus = tm_map(corpus, removeNumbers)
   corpus = tm_map(corpus, content_transformer(tolower))
-  #corpus = tm_map(corpus, stemDocument, language = "english")   ##Not relevant for Scraping
-  corpus = tm_map(corpus, removeWords,c(stopwords("en"),"greenwashing","cocacola","nestlé"))
+  corpus = tm_map(corpus, removeWords,c(stopwords("en")))
   return(corpus)
 }
 cocacola_clean_corpus = clean_corpus(cocacola_tweets_corpus)
@@ -44,7 +44,6 @@ cocacola_m = as.matrix(cocacola_tdm)
 cocacola_term_frequency = rowSums(cocacola_m)
 cocacola_term_frequency = sort(cocacola_term_frequency, decreasing = TRUE)
 top30_cocacola = data.frame(cocacola_term_frequency[1:30])
-#barplot(cocacola_term_frequency[1:30], col = "tan", las = 2)
 
 #Hashtags
 cocacola_hashtags = cocacola %>%

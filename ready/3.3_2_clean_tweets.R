@@ -39,9 +39,6 @@ clean_corpus = function(corpus){
   corpus = tm_map(corpus, removePunctuation)
   corpus = tm_map(corpus, removeNumbers)
   corpus = tm_map(corpus, content_transformer(tolower), lazy=TRUE)
-  #corpus = tm_map(corpus, removeWords, stopwords("en")) 
-  #corpus = tm_map(corpus, removeWords, c("vw", "volkswagen", "shell", "starbucks", "nestle", "mcdonalds","mcdonald", "mc donald's", "ikea", "hm", "exxonmobil", "exxon mobil", "coca cola", "cocacola", "unilever", "amp", "aamp"))
-  #corpus = tm_map(corpus, stripWhitespace)
   return(corpus)
 }
 
@@ -52,8 +49,6 @@ tweets_corpus_stemmed = tm_map(tweets_corpus_clean, removeWords, c("vw", "volksw
 tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed, removeWords, stopwords("en")) 
 ##Apply Word Stemming / Lemmatization
 tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed, stemDocument)
-# tweets_corpus_stemmed = tm_map(tweets_corpus_clean, lemmatize_strings)
-# tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed, PlainTextDocument)
 tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed , stripWhitespace)
 
 save.image("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/tweets_decreasedVW_stemmed.RData")

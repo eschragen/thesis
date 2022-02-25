@@ -197,7 +197,6 @@ for (i in 1:6) {
 ikea = ikea %>% left_join(virality_ikea, by = "date") %>% select(-n)  %>% 
   mutate(company = "ikea") %>% filter(date > "2020-08-21" & date < "2021-08-21") 
 
-
 ####COMBINE IN ONE DATASET####
 df = rbind(vw, hm, ikea, cocacola, shell, unilever, nestle, exxonmobil)
 
@@ -208,10 +207,6 @@ df = df[!duplicated(df$tweet),]
 df = df %>% select(-c("conversation_id","created_at","timezone","name","place","language","cashtags","near","geo","source","user_rt_id","user_rt","retweet_id","retweet_date","translate","trans_src","trans_dest", "retweet")) %>%
   drop_empty_row()
 
-# #save df 
-# setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
-# write.csv(df, file = "df_nonequal_size.csv")
-
 #save df with smaller subset of VW
 average_amount_tweets = df %>% filter(company != "vw") %>% group_by(company) %>% count()
 mean(average_amount_tweets$n)
@@ -219,7 +214,6 @@ mean(average_amount_tweets$n)
 df_subsetvw = df %>% filter(company == "vw") %>% sample_n(mean(average_amount_tweets$n))
 df_withoutvw = df %>% filter(company != "vw") 
 df_nonequal_size_subsetVW = rbind(df_subsetvw,df_withoutvw)
-
 
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
 write.csv(df_nonequal_size_subsetVW, file = "df_nonequal_size_subsetVW.csv")
