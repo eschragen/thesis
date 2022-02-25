@@ -1,1 +1,23 @@
-# thesis
+####Explanation of data source
+##data_breakingpoints: Created to be able to retrace steps in between and return to the original state 
+##twint_outputs: Scraping Outputs of every run per company (Greenwashing, Further Keywords/Hashtags)
+#df_select: Final dataframe for Multiple Regression Analysis
+
+#3.2_1_tweet_scraping
+Run python script for each company seperately on cmd after installing twint scraper (https://github.com/twintproject/twint)
+
+#3.2_2_select_timeframe
+A one-year period was selected for each company in which the most tweets were generated.
+
+#3.2_3_find_keywords_for_scraping
+Based on the most frequently used keywords and hashtags related to greenwashing allegations, another query is performed to expand the existing dataset.
+
+#3.3_1_combine_company_datasets
+All gathered data is combined in one dataframe.
+Since the data collection for the company VW resulted in a disproportionately high number of tweets (approx. 73%), the number of corresponding tweets is re-duced to the average number of tweets of the other companies using random sampling (n  = 23,574).
+
+#3.3_2_clean_tweets
+Data cleaning methods are applied to textual data of tweets.
+
+
+###HIER WEITER: 
