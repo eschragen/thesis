@@ -79,6 +79,7 @@ for(i in 1:nrow(tags_df)){
     tags_df$wclass[i] = "user_id"
   }
 }
+beep(8)
 
 #select word classes
 tags_df = tags_df %>%  filter(wclass == "noun" | wclass == "adjective" | wclass == "verb" | wclass == "user_id")

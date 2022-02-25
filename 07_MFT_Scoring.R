@@ -1,19 +1,35 @@
 #Apply Scoring without POS tagging 
-source("~/GitHub/thesis/04_clean_tweets.R")
+#source("~/GitHub/thesis/04_clean_tweets.R")
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
 
-#Export lemmatized tweets
-content_lem = as.data.frame(sapply(tweets_corpus_stemmed, function(x){x$content}))     #transponse (t) when you apply lemmatization
-content_lem = cbind(tweets_subset[,1], content_lem)
-colnames(content_lem) = c("id", "tweet")
-content_lem[content_lem==""] = NA
-content_lem = content_lem[complete.cases(content_lem),]
-write.csv(content_lem, file = "content_lem.csv")
-
+# #Export lemmatized tweets
+# content_lem = as.data.frame(sapply(tweets_corpus_stemmed, function(x){x$content}))     #transponse (t) when you apply lemmatization
+# content_lem = cbind(tweets_subset[,1], content_lem)
+# colnames(content_lem) = c("id", "tweet")
+# content_lem[content_lem==""] = NA
+# content_lem = content_lem[complete.cases(content_lem),]
+# write.csv(content_lem, file = "content_lem.csv")
+# 
 #Export non-lemmatized tweets
 content[content==""] = NA
 content = content[complete.cases(content),]
-write.csv(content, file = "content_nonlem.csv")
+write.csv(content, file = "content_nonlem_withstopwords.csv")
+
+#NEW DATA
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
+library(readr)
+library(tidyverse)
+df = read_csv("df_nonequal_size_subsetVW.csv")
+df_MFT = df %>% select(id, tweet)
+df_MFT$tweet = iconv(df_MFT$tweet, to = "ASCII", sub = " ") #Remove non-ASCII characters
+df_MFT$tweet = gsub("[ |\t]{2,}", "", df_MFT$tweet) #Remove tabs
+df_MFT$tweet = gsub("[ |\n]{2,}", "", df_MFT$tweet) #Remove tabs
+df_MFT$tweet = gsub("[ |\r]{2,}", "", df_MFT$tweet) #Remove tabs
+df_MFT$tweet =   sub("\r", "", df_MFT$tweet, fixed = TRUE)
+df_MFT[df_MFT==""] = NA
+df_MFT = df_MFT[complete.cases(df_MFT),]
+write.csv(df_MFT, file = "content_NEW.csv")
+
 
 # #Run eMFD Scoring via CMD
 # cd C:\Users\eva_s\OneDrive\Dokumente\GitHub\Moral_Foundation_FrameAxis
@@ -40,11 +56,11 @@ write.csv(content, file = "content_nonlem.csv")
 #anaconda_emfd = cbind(content_lem, anaconda)
 #### ####
 
-cmd = read_csv("results_emfd/results.csv")
+cmd = read_csv("results_emfd/results_NEW.csv")
 cmd = cmd[,-1]
 
-cmd_emfd = cmd %>% select(id, tweet, bias_loyalty, bias_fairness, bias_sanctity, bias_authority, bias_care) %>% group_by(id) %>% 
-  mutate(MFT_score = mean(bias_loyalty, bias_fairness, bias_sanctity, bias_authority, bias_care))
+cmd_emfd = cmd %>% select(id, tweet, bias_loyalty, bias_fairness, bias_sanctity, bias_authority, bias_care) %>% group_by(id) %>%
+  mutate(MFT_score = sum(bias_loyalty, bias_fairness, bias_sanctity, bias_authority, bias_care))
 
 #Add MFT score to original df
 df_subset = df_subset %>% left_join(cmd_emfd, by = "id") 
@@ -58,7 +74,7 @@ MFTcompany = df_subset %>% select(id, company, MFT_score) %>% ggplot(aes(x = fac
 
 MFTcompany
 
-#MFT per topic (Run Topic Modeling before & this script w/o sourcing "Clean Tweets" (line 2)!)
+#MFT per topic (Run Topic Modeling before & this script w/o sourcing "Clean Tweets"!)
 MFTtopic = df_subset %>% select(id, MFT_score, topic) %>% ggplot(aes(x = as.factor(topic), y = MFT_score)) +
   geom_boxplot()
 

@@ -6,6 +6,9 @@ library(data.table)
 setwd("~/GitHub/twint/outputs")
 years = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/year2015_2021.csv")
 
+#determine sample size per company (equal sample size --> pick n of smallest: H&M)
+n = 4500
+
 ####PREPARE COMPANY DATASETS####
 
 #cocacola
@@ -29,7 +32,7 @@ for (i in 1:6) {
 }
 
 cocacola = cocacola %>% left_join(virality_cocacola, by = "date") %>% select(-n) %>% 
-  mutate(company = "cocacola") %>% filter(date > "2020-11-01" & date < "2021-11-01")  
+                        mutate(company = "cocacola") %>% filter(date > "2020-11-01" & date < "2021-11-01") %>% sample_n(n) 
 
 #shell
 shell_greenwashing = read_csv("shell_greenwashing.csv")
@@ -52,7 +55,7 @@ for (i in 1:6) {
 }
 
 shell = shell %>% left_join(virality_shell, by = "date") %>% select(-n) %>% 
-  mutate(company = "shell") %>% filter(date > "2020-11-01" & date < "2021-11-01")  
+  mutate(company = "shell") %>% filter(date > "2020-11-01" & date < "2021-11-01") %>% sample_n(n) 
 
 
 #unilever
@@ -76,7 +79,7 @@ for (i in 1:6) {
 }
 
 unilever = unilever %>% left_join(virality_unilever, by = "date") %>% select(-n)  %>%  
-  mutate(company = "unilever") %>% filter(date > "2020-11-01" & date < "2021-11-01") 
+  mutate(company = "unilever") %>% filter(date > "2020-11-01" & date < "2021-11-01") %>% sample_n(n)
 
 #nestle
 nestle_greenwashing = read_csv("nestle_greenwashing.csv")
@@ -99,8 +102,7 @@ for (i in 1:6) {
 }
 
 nestle = nestle %>% left_join(virality_nestle, by = "date") %>% select(-n)  %>% 
-  mutate(company = "nestle") %>% filter(date > "2020-11-01" & date < "2021-11-01") 
-
+  mutate(company = "nestle") %>% filter(date > "2020-11-01" & date < "2021-11-01") %>% sample_n(n)
 
 #exxonmobil
 exxonmobil_greenwashing = read_csv("exxonmobil_greenwashing.csv")
@@ -123,7 +125,7 @@ for (i in 1:6) {
 }
 
 exxonmobil = exxonmobil %>% left_join(virality_exxonmobil, by = "date") %>% select(-n) %>% 
-  mutate(company = "exxonmobil") %>% filter(date > "2020-11-01" & date < "2021-11-01")  
+  mutate(company = "exxonmobil") %>% filter(date > "2020-11-01" & date < "2021-11-01") %>% sample_n(n) 
 
 #vw: 2015-09-16 until 2016-09-16
 vw_greenwashing = read_csv("vw_greenwashing.csv")
@@ -149,7 +151,7 @@ for (i in 1:6) {
 }
 
 vw = vw %>% left_join(virality_vw, by = "date") %>% select(-n)  %>% 
-  mutate(company = "vw") %>% filter(date > "2015-09-16" & date < "2016-09-16") 
+  mutate(company = "vw") %>% filter(date > "2015-09-16" & date < "2016-09-16") %>% sample_n(n)
 
 #hm: 2020-08-23 until 2021-08-23
 hm_greenwashing = read_csv("hm_greenwashing.csv")
@@ -172,7 +174,7 @@ for (i in 1:6) {
 }
 
 hm = hm %>% left_join(virality_hm, by = "date") %>% select(-n) %>% 
-  mutate(company = "hm") %>% filter(date > "2020-08-23" & date < "2021-08-23")  
+  mutate(company = "hm") %>% filter(date > "2020-08-23" & date < "2021-08-23")  %>% sample_n(n)
 
 #ikea: 2020-08-21 until 2021-08-21
 ikea_greenwashing = read_csv("ikea_greenwashing.csv")
@@ -195,11 +197,11 @@ for (i in 1:6) {
 }
 
 ikea = ikea %>% left_join(virality_ikea, by = "date") %>% select(-n)  %>% 
-  mutate(company = "ikea") %>% filter(date > "2020-08-21" & date < "2021-08-21") 
+  mutate(company = "ikea") %>% filter(date > "2020-08-21" & date < "2021-08-21") %>% sample_n(n)
 
 
 ####COMBINE IN ONE DATASET####
-df = rbind(vw, hm, ikea, cocacola, shell, unilever, nestle, exxonmobil)
+df = rbind(vw, starbucks, hm, ikea, cocacola, shell, unilever, nestle, mcdonalds, exxonmobil)
 
 #exclude non-relevant columns
 df = df[order(df$user_id, df$date, decreasing=TRUE),]
@@ -208,20 +210,7 @@ df = df[!duplicated(df$tweet),]
 df = df %>% select(-c("conversation_id","created_at","timezone","name","place","language","cashtags","near","geo","source","user_rt_id","user_rt","retweet_id","retweet_date","translate","trans_src","trans_dest", "retweet")) %>%
   drop_empty_row()
 
-# #save df 
-# setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
-# write.csv(df, file = "df_nonequal_size.csv")
-
-#save df with smaller subset of VW
-average_amount_tweets = df %>% filter(company != "vw") %>% group_by(company) %>% count()
-mean(average_amount_tweets$n)
-
-df_subsetvw = df %>% filter(company == "vw") %>% sample_n(mean(average_amount_tweets$n))
-df_withoutvw = df %>% filter(company != "vw") 
-df_nonequal_size_subsetVW = rbind(df_subsetvw,df_withoutvw)
-
-
+#save df 
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
-write.csv(df_nonequal_size_subsetVW, file = "df_nonequal_size_subsetVW.csv")
-
+write.csv(df, file = "df")
 
