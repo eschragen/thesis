@@ -52,8 +52,5 @@ tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed, stemDocument)
 tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed , stripWhitespace)
 
 save.image("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/tweets_decreasedVW_stemmed.RData")
-# #get content of corpus
-# content = as.data.frame(sapply(tweets_corpus_stemmed, function(x){x$content}))     #transponse (t) when you apply lemmatization
-# content = cbind(tweets_subset[,1], content[,1])
-# colnames(content) = c("id", "tweet")
+
 

@@ -1,6 +1,6 @@
 ####Explanation of data source
-##data_breakingpoints: Created to be able to retrace steps in between and return to the original state 
 ##twint_outputs: Scraping Outputs of every run per company (Greenwashing, Further Keywords/Hashtags)
+##data_breakingpoints: Created to be able to retrace steps in between and return to the original state 
 #df_select: Final dataframe for Multiple Regression Analysis
 
 #3.2_1_tweet_scraping
@@ -18,5 +18,46 @@ Since the data collection for the company VW resulted in a disproportionately hi
 
 #3.3_2_clean_tweets
 Data cleaning methods are applied to textual data of tweets.
+
+#3.3_3_topic_modeling
+Optimal number of topics is identified manually before running topic modeling.
+
+#4.1_1_prepare_eMFD_scoring
+Prepare textual input for eMFD Scoring. After, analyze results per company.
+
+#4.1_2_emfdcode
+Run Python Code via cmd after installing eMFD Package (https://github.com/negar-mokhberian/Moral_Foundation_FrameAxis)
+
+#4.2_1_industry
+Compute environmental performance based on GHG emissions
+
+#4.2_2_green_advertising_scrape_company_pages
+Run Python Code via cmd (Twint) to get postings of all compnaies
+
+#4.2_3_green_advertising_prepare_company_pages
+Combine results in one dataframe while excluding replies
+
+#4.2_4_green_advrtising_determine_time_period
+Get all replies to company postings to determine time period that will be considered for green advertising variable
+
+#4.2_5_green_advertising_count
+Compute weekly counts (Green Ad made last 7 days Yes/No)
+
+#4.2_6_negative_WOM
+Count tweets per week and per company that contain at least some moral concerns 
+
+#4.2_7_social_network_size
+Get user ID and scrape meta data per user (followers, following)
+
+#4.2_8_prepare_df_for_empirical_testing
+Combine all variables in one dataframe.
+Compute variables: industry_brown, green_ad, max_morality
+
+#5.1_2_descriptive_analyses
+Summary statistics for categorical and metric variables. Visualize mean differences of moral outrage per company.
+
+
+
+
 
 

@@ -62,7 +62,7 @@ fit = lm(moral_outrage ~
            relevel(max_morality, ref = "intensity_fairness")+ 
            relevel(topic, ref = "4") +
            followers + following, 
-         data = df_new)
+          data = df_new)
 
 #extract top 10 highest cooks distance
 top10cooks = df_new[c(which(rownames(df_new) %in% names(sort(cooks.distance(fit), decreasing = T)[1:10]))),]

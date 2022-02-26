@@ -12,8 +12,8 @@ library(udpipe)
 library(data.table)
 
 #load data
-load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company/lda4_topics.RData")
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company")
+load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company/lda4_topics.RData")
 
 ####determine number per company####
 # content_unilever = content_stemmed %>% filter(company == "unilever")
@@ -484,23 +484,6 @@ results$k[results$company == "ikea" & results$topics == 7]=TRUE
 results$k[results$company == "nestle" & results$topics == 4]=TRUE
 results$k[results$company == "shell" & results$topics == 5]=TRUE
 results$k[results$company == "unilever" & results$topics == 4]=TRUE
-
-#CaoJuan2009 
-results$CaoJuan2009[results$company == "vw"&results$topics == 3] = 0.23
-results$CaoJuan2009[results$company == "vw"&results$topics == 4] = 0.21
-results$CaoJuan2009[results$company == "vw"&results$topics == 5] = 0.26
-results$CaoJuan2009[results$company == "vw"&results$topics == 6] = 0.19 
-results$CaoJuan2009[results$company == "vw"&results$topics == 7] = 0.25 
-results$CaoJuan2009[results$company == "vw"&results$topics == 8] = 0.24 
-results$CaoJuan2009[results$company == "vw"&results$topics == 9] = 0.22 
-results$CaoJuan2009[results$company == "vw"&results$topics == 10] = 0.21 
-results$CaoJuan2009[results$company == "vw"&results$topics == 11] = 0.25 
-results$CaoJuan2009[results$company == "nestle"&results$topics == 5] = 0.15 
-results$CaoJuan2009[results$company == "nestle"&results$topics == 6] = 0.149
-results$CaoJuan2009[results$company == "cocacola"&results$topics == 3] = 0.09
-results$CaoJuan2009[results$company == "exxonmobil"&results$topics == 3] = 0.099
-results$CaoJuan2009[results$company == "unilever"&results$topics == 3] = 0.054
-results$CaoJuan2009[results$company == "cocacola"&results$topics == 4] = 0.08
 
 results$company[results$company == "vw"]= "VW"
 results$company[results$company == "cocacola"]="Coca Cola"

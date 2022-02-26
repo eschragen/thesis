@@ -11,7 +11,7 @@ options(scipen=999) #avoid scientific notations (e.g. e+18)
 
 setwd("~/GitHub/twint/outputs/profile_tweets")
 
-####import data####
+####import data & filter out replies####
 profile_cocacola = read_csv("profile_cocacola.csv")
 profile_cocacola$is_answer = startsWith(profile_cocacola$tweet, "@")
 profile_cocacola = profile_cocacola %>% filter(is_answer == FALSE) %>% select(id, date, tweet, video, link)%>% 
@@ -48,7 +48,6 @@ profile_unilever = profile_unilever %>% filter(is_answer == FALSE) %>% select(id
   mutate(company = "unilever") %>% filter(date > "2020-10-01" & date < "2021-11-01")
 
 profile_vw = read_xlsx("profile_vw.xlsx")
-#profile_vw = read_csv("profile_vw.csv")
 profile_vw$is_answer = startsWith(profile_vw$tweet, "@")
 profile_vw = profile_vw %>% filter(is_answer == FALSE) %>% select(id, date, tweet, video, link)%>% 
   mutate(company = "vw") %>% filter(date > "2015-08-16" & date < "2016-09-16")
@@ -56,10 +55,12 @@ profile_vw = profile_vw %>% filter(is_answer == FALSE) %>% select(id, date, twee
 company_profiles = rbind(profile_cocacola, profile_exxonmobil, profile_hm, profile_ikea, profile_nestle, profile_shell, profile_unilever, profile_vw)
 company_profiles$real_id = sub(".*status/", "", company_profiles$link)  
 company_profiles = company_profiles %>% select(-link)
+company_profiles = company_profiles %>% select(-id)
+company_profiles = company_profiles %>% mutate(id = real_id) %>% select(-real_id)
 
 #save df
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
-write_xlsx(x = company_profiles, path = "company_profiles_video.xlsx", col_names = TRUE)
+write_xlsx(x = company_profiles, path = "company_profiles.xlsx", col_names = TRUE)
 
 
 
