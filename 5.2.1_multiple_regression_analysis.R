@@ -77,7 +77,7 @@ fit2 = lm(moral_outrage ~
             data = df_new2)
 
 #create summary statistics
-summ(fit2)
+summ(fit2, digits = 4)
 
 ####1. LINEARITY####
 #Linearity between predictors and outcome variable (Residuals vs Fitted plot)

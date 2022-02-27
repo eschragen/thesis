@@ -87,12 +87,12 @@ fit_care = lm(care.vice_100 ~
 
 ####ASSUMPTIONS####
 #unusual observations
-par(mfrow=c(1,5))
-plot(fit_fairness, 4, sub.caption = NA, main = "Fairness", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_loyalty, 4, sub.caption = NA,main = "Loyalty", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_sanctity, 4, sub.caption = NA,main = "Sanctity", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_authority, 4, sub.caption = NA,main = "Authority", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_care, 4, sub.caption = NA,main = "Care", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# par(mfrow=c(1,5))
+# plot(fit_fairness, 4, sub.caption = NA, main = "Fairness", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_loyalty, 4, sub.caption = NA,main = "Loyalty", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_sanctity, 4, sub.caption = NA,main = "Sanctity", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_authority, 4, sub.caption = NA,main = "Authority", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_care, 4, sub.caption = NA,main = "Care", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
 
 #extract top 10 highest cooks distance
 top10cooks_fairness = df_foundations[c(which(rownames(df_foundations) %in% names(sort(cooks.distance(fit_fairness), decreasing = T)[1:10]))),]
@@ -159,37 +159,38 @@ fit_care2 = lm(care.vice_100 ~
                  followers + following, 
                data = df_foundations2_care)
 
-####1. LINEARITY####
-par(mfrow=c(1,5))
-plot(fit_fairness2,1, sub.caption = NA,main = "Fairness", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-plot(fit_loyalty2,1, sub.caption = NA,main = "Loyalty", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-plot(fit_sanctity2,1, sub.caption = NA,main = "Sanctity", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-plot(fit_authority2,1, sub.caption = NA,main = "Authority", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-plot(fit_care2,1, sub.caption = NA,main = "Care", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-
-####2. NORMALITYY#### 
-par(mfrow=c(1,5))
-plot(fit_fairness2,2, sub.caption = NA,main = "Fairness", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_loyalty2,2, sub.caption = NA,main = "Loyalty", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_sanctity2,2, sub.caption = NA,main = "Sanctity", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_authority2,2, sub.caption = NA,main = "Authority", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_care2,2, sub.caption = NA,main = "Care", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-
-####3. HOMOSCEDASTICITY####
-par(mfrow=c(1,5))
-plot(fit_fairness2,3, sub.caption = NA,main = "Fairness", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-plot(fit_loyalty2,3, sub.caption = NA,main = "Loyalty", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-plot(fit_sanctity2,3, sub.caption = NA,main = "Sanctity", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-plot(fit_authority2,3, sub.caption = NA,main = "Authority", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-plot(fit_care2,3, sub.caption = NA,main = "Care", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
-
-####4. MULTICOLLINEARITY####
-imcdiag(fit_fairness2)
-imcdiag(fit_loyalty2)
-imcdiag(fit_authority2)
-imcdiag(fit_sanctity2)
-imcdiag(fit_care2)
+# ####1. LINEARITY####
+# par(mfrow=c(1,5))
+# plot(fit_fairness2,1, sub.caption = NA,main = "Fairness", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# plot(fit_loyalty2,1, sub.caption = NA,main = "Loyalty", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# plot(fit_sanctity2,1, sub.caption = NA,main = "Sanctity", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# plot(fit_authority2,1, sub.caption = NA,main = "Authority", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# plot(fit_care2,1, sub.caption = NA,main = "Care", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# 
+# ####2. NORMALITYY#### 
+# par(mfrow=c(1,5))
+# plot(fit_fairness2,2, sub.caption = NA,main = "Fairness", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_loyalty2,2, sub.caption = NA,main = "Loyalty", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_sanctity2,2, sub.caption = NA,main = "Sanctity", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_authority2,2, sub.caption = NA,main = "Authority", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_care2,2, sub.caption = NA,main = "Care", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# 
+# ####3. HOMOSCEDASTICITY####
+# par(mfrow=c(1,5))
+# plot(fit_fairness2,3, sub.caption = NA,main = "Fairness", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# plot(fit_loyalty2,3, sub.caption = NA,main = "Loyalty", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# plot(fit_sanctity2,3, sub.caption = NA,main = "Sanctity", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# plot(fit_authority2,3, sub.caption = NA,main = "Authority", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# plot(fit_care2,3, sub.caption = NA,main = "Care", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0, lwd = 5)
+# 
+# ####4. MULTICOLLINEARITY####
+# imcdiag(fit_fairness2)
+# imcdiag(fit_loyalty2)
+# imcdiag(fit_authority2)
+# imcdiag(fit_sanctity2)
+# imcdiag(fit_care2)
 
 #print summary statistics
 compare_foundations = export_summs(fit_fairness2,fit_loyalty2,fit_authority2,fit_sanctity2,fit_care2,
                                    model.names = c("Fairness","Loyalty","Authority","Sanctity","Care"))
+compare_foundations

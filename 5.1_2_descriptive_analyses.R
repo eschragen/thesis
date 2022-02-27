@@ -31,42 +31,40 @@ df = df %>% filter(following_count <= quantile(following_count, 0.95, na.rm = TR
                    vice_virality <= quantile(vice_virality, 0.95, na.rm = TRUE))
 
 ####metric variables####
-df %>% filter(vice_virality <= quantile(vice_virality, 0.9)) %>%
+df %>% 
   summarize(mean_WOM = mean(vice_virality),
                  median_WOM = median(vice_virality),
                  sd_WOM = sd(vice_virality),
                  min_WOM = min(vice_virality),
                  max_WOM = max(vice_virality))
 
-df %>% filter(followers_count <= quantile(followers_count, 0.9)) %>%
-        summarize(mean_followers = mean(followers_count),
+df %>% 
+  summarize(mean_followers = mean(followers_count),
                  median_followers = median(followers_count),
                  sd_followers = sd(followers_count),
                  min_followers = min(followers_count),
                  max_followers = max(followers_count))
 
-df %>% filter(following_count <= quantile(following_count, 0.9)) %>%     
-          summarize(mean_following = mean(following_count),
+df %>%     
+  summarize(mean_following = mean(following_count),
                  median_following = median(following_count),
                  sd_following = sd(following_count),
                  min_following = min(following_count),
                  max_following = max(following_count)) 
 
+df %>%     
+  summarize(mean_moral_outrage = mean(vice_sum_100),
+            median_moral_outrage = median(vice_sum_100),
+            sd_moral_outrage = sd(vice_sum_100),
+            min_moral_outrage = min(vice_sum_100),
+            max_moral_outrage = max(vice_sum_100)) 
 
-df %>% filter(vice_sum_100 <= quantile(vice_sum_100, 0.99)) %>%     
-  summarize(mean_following = mean(vice_sum_100),
-            median_following = median(vice_sum_100),
-            sd_following = sd(vice_sum_100),
-            min_following = min(vice_sum_100),
-            max_following = max(vice_sum_100)) 
-
-
-df %>% filter(vice_sum_100 <= quantile(vice_sum_100, 0.99)) %>% group_by(company) %>%    
-  summarize(mean_following = mean(vice_sum_100),
-            median_following = median(vice_sum_100),
-            sd_following = sd(vice_sum_100),
-            min_following = min(vice_sum_100),
-            max_following = max(vice_sum_100)) 
+df %>% group_by(company) %>%      
+  summarize(mean_moral_outrage = mean(vice_sum_100),
+            median_moral_outrage = median(vice_sum_100),
+            sd_moral_outrage = sd(vice_sum_100),
+            min_moral_outrage = min(vice_sum_100),
+            max_moral_outrage = max(vice_sum_100)) 
 
 ####categorical variables####
 df %>% group_by(industry_brown) %>% count() %>% mutate(ratio = n/nrow(df))
