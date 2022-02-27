@@ -8,7 +8,8 @@ library(stats)
 options(scipen=999) 
 
 ####PREPARE DATA####
-data = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/df_select.csv")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
+data = read_csv("df_select.csv")
 df = data %>% select(-c(X1,date,tweet,username,employees,total_assets)) 
 
 #compute new output variable (* 100)
@@ -79,7 +80,6 @@ fit2 = lm(moral_outrage ~
 summ(fit2)
 
 ####1. LINEARITY####
-
 #Linearity between predictors and outcome variable (Residuals vs Fitted plot)
 ##Check: No fitted pattern (Red line approx. horizontal at Zero)
 #plot(fit2,1, sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3)

@@ -1,10 +1,11 @@
 library(readxl)
 library(tidyverse)
 library(data.table)
+library(writexl)
 
 ####import data####
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
-years = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/year2015_2021.csv")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
+years = read_csv("year2015_2021.csv")
 claims = read_excel("company_profiles.xlsx")
 
 df = claims %>% select(date, company, environment) 
@@ -12,7 +13,6 @@ df$posting = 1
 df$environment[is.na(df$environment)] = 0
 df$environment = as.numeric(df$environment)
 df$posting = as.numeric(df$posting)
-
 
 ####count weekly green advertising for every company seperately####
 ####cocacola####
@@ -113,9 +113,6 @@ df_ikea = df_ikea[32:396,]
 df_ikea = df_ikea %>% mutate(day = row_number(), company = "ikea")
 
 
-
-
-
 ####exxonmobil####
 #create subset of company
 df_exxonmobil = df %>% filter(company == "exxonmobil")
@@ -147,10 +144,6 @@ df_exxonmobil$env_claim_made[df_exxonmobil$total_env_posts_perweek != 0] = 1
 #subset of year under consdayeration & add row numbers
 df_exxonmobil = df_exxonmobil[32:396,]
 df_exxonmobil = df_exxonmobil %>% mutate(day = row_number(), company = "exxonmobil")
-
-
-
-
 
 
 ####hm####
@@ -305,6 +298,4 @@ df_vw = df_vw %>% mutate(day = row_number(), company = "vw")
 # ratio_env_combined
 
 ####create df####
-library(writexl)
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
 write_xlsx(x = postings_combined, path = "postings_combined.xlsx", col_names = TRUE)

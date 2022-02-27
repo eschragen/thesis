@@ -3,11 +3,13 @@ library(tidyverse)
 library(ggplot2)
 library(hrbrthemes)
 library(patchwork)
-options(scipen=999) #avoid scientific notations
+options(scipen=999) 
 library(forcats)
 library(ggplot2)
+
 ####PREPARE DATA####
-data = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/df_select.csv")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
+data = read_csv("df_select.csv")
 df = data %>% select(-c(X1,date,tweet,username,employees,total_assets)) 
 
 #compute new output variable (LOG, Factor 100)

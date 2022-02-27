@@ -8,7 +8,8 @@ library(stats)
 options(scipen=999) 
 
 ####PREPARE DATA####
-data = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/df_select.csv")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
+data = read_csv("df_select.csv")
 df = data %>% select(-c(X1,date,tweet,username,employees,total_assets)) 
 
 #compute new output variable (* 100)
@@ -39,6 +40,7 @@ df_new = df_new %>% rename("moral_outrage" = "vice_sum_100", "negativeWOM_volume
                            "followers" = "followers_count_norm", "following" = "following_count_norm")
 
 ####Import new topics & create models####
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints/seperate_topic_moldeing_per_company")
 cocacola = df_new %>% filter(company == "cocacola")
 topics_cocacola = read_csv("topics_cocacola.csv")
 topics_cocacola = topics_cocacola %>% select(-X1)

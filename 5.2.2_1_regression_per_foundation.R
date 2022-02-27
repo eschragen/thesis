@@ -8,7 +8,8 @@ library(stats)
 options(scipen=999) 
 
 ####PREPARE DATA####
-data = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/df_select.csv")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
+data = read_csv("df_select.csv")
 df = data %>% select(-c(X1,date,tweet,username,employees,total_assets)) 
 
 #compute new output variable (* 100)

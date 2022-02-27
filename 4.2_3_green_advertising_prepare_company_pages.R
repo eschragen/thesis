@@ -7,9 +7,9 @@ library(dplyr)
 library(ggplot2)
 library(textstem)
 library(writexl)
-options(scipen=999) #avoid scientific notations (e.g. e+18)
+options(scipen=999) 
 
-setwd("~/GitHub/twint/outputs/profile_tweets")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/twint_scraping_outputs/company_pages")
 
 ####import data & filter out replies####
 profile_cocacola = read_csv("profile_cocacola.csv")
@@ -59,7 +59,7 @@ company_profiles = company_profiles %>% select(-id)
 company_profiles = company_profiles %>% mutate(id = real_id) %>% select(-real_id)
 
 #save df
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
 write_xlsx(x = company_profiles, path = "company_profiles.xlsx", col_names = TRUE)
 
 

@@ -3,8 +3,8 @@ library(tidyverse)
 library(textclean)
 library(data.table)
 
-setwd("~/GitHub/twint/outputs")
-years = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/year2015_2021.csv")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/twint_scraping_outputs")
+years = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints/year2015_2021.csv")
 
 ####PREPARE COMPANY DATASETS####
 
@@ -215,7 +215,7 @@ df_subsetvw = df %>% filter(company == "vw") %>% sample_n(mean(average_amount_tw
 df_withoutvw = df %>% filter(company != "vw") 
 df_nonequal_size_subsetVW = rbind(df_subsetvw,df_withoutvw)
 
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
 write.csv(df_nonequal_size_subsetVW, file = "df_nonequal_size_subsetVW.csv")
 
 

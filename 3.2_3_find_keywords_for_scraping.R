@@ -4,7 +4,8 @@ library(dplyr)
 library(tm)
 library(qdap)
 
-##run for every company seperately
+##run for every company seperately & identify environment-related keywords/hashtags
+##results in "3.2_1_tweet_scraping"
 #cocacola
 #shell
 #vw
@@ -16,7 +17,7 @@ library(qdap)
 #exxonmobil
 
 #upload & combine csv files
-setwd("~/GitHub/twint/outputs")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/twint_scraping_outputs")
 cocacola = read_csv("cocacola_greenwashing.csv")
 
 #extract unique tweets in English

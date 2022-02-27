@@ -12,7 +12,7 @@ library(udpipe)
 library(data.table)
 
 #####PREPARE DTM####
-load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/tweets_decreasedVW_stemmed.RData")
+load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints/tweets_decreasedVW_stemmed.RData")
 
 #get content of stemmed corpus
 content_stemmed = as.data.frame(sapply(tweets_corpus_stemmed, function(x){x$content}))     
@@ -105,7 +105,7 @@ tweets_subset_topics = tweets_subset[indices,]
 tweets_subset_topics = cbind(tweets_subset_topics, lda.topics)
 colnames(tweets_subset_topics) = c("id","tweet_stemmed", "topic")
 
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
 save.image(file = "lda4_topics.RData")
 
 #Top 30 terms or words under each topic

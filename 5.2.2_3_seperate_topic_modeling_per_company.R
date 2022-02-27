@@ -12,10 +12,11 @@ library(udpipe)
 library(data.table)
 
 #load data
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company")
-load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company/lda4_topics.RData")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
+load("lda4_topics.RData")
 
 ####determine number per company####
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints/seperate_topic_moldeing_per_company")
 # content_unilever = content_stemmed %>% filter(company == "unilever")
 # #create corpus
 # tweets_corpus_unilever = VCorpus(VectorSource(content_unilever$tweet_stemmed))

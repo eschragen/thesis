@@ -1,6 +1,3 @@
-#cd C:\Users\eva_s\OneDrive\Dokumente\GitHub\twint\outputs\profile_tweets
-
-
 import twint
 
 c = twint.Config()
@@ -17,7 +14,7 @@ twint.run.Search(c)
 #starbucks @Starbucks
 #nestle @Nestle
 #mcdonalds @McDonalds
-#ikea @IKEA nur bis 2020-09-24!!
+#ikea @IKEA 
 #hm @hm
 #exxonmobil @exxonmobil
 #cocacola @CocaCola

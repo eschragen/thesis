@@ -1,7 +1,7 @@
 library(readr)
 library(tidyverse)
 library(data.table)
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
 emfd = read_csv("results_emfd.csv")
 emfd = emfd %>% group_by(id) %>% mutate(vice_sum = sum(loyalty.vice, care.vice, fairness.vice, sanctity.vice, authority.vice)) 
 df = read_csv("df_nonequal_size")
@@ -9,7 +9,7 @@ df = df %>% left_join(emfd, by = "id")
 
 #filter sum of vice so that tweet contains at least some moral outrage
 df_vice = df %>% select(id, company, vice_sum,date) %>% filter(vice_sum > 0)
-years = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/year2015_2021.csv")
+years = read_csv("year2015_2021.csv")
 
 df_vice_cocacola = df_vice %>% filter(company == "cocacola")%>% group_by(date) %>% count()
 df_vice_cocacola = years %>% left_join(df_vice_cocacola, by = "date") %>% mutate(company = "cocacola")

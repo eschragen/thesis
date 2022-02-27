@@ -4,7 +4,7 @@ library(readxl)
 options(scipen=999) #avoid scientific notations (e.g. e+18)
 
 #import data
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
 df = read_csv("df_nonequal_size")
 company_info = read_csv("company_info_select.csv")
 environmental_claims = read_xlsx("postings_combined.xlsx")
@@ -33,7 +33,6 @@ virality_vice = virality_vice %>% select(-c(X1))
 df_select = df_select %>% left_join(virality_vice, by = c("company","date")) 
 
 #eMFD Scoring
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/results_emfd")
 MFT = read_csv("results_emfd.csv")
 MFT = MFT %>% group_by(id) %>% mutate(vice_sum = sum(loyalty.vice, care.vice, fairness.vice, sanctity.vice, authority.vice)) 
 max_morality = MFT[,-c(1:8,14:25)]
@@ -43,10 +42,9 @@ MFT_select = MFT[,-c(1,3,15,16,18,21,23)]
 MFT_select = MFT[,c('id', 'loyalty.vice', 'care.vice','fairness.vice','sanctity.vice', 'authority.vice', 'vice_sum', 'max_morality')]
 
 #Topics
-topicprob = read.csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company/topicprob_df.csv")
+topicprob = read.csv("topicprob_df.csv")
 df_select = df_select %>% left_join(topicprob, by = "id") %>% drop_na(topic) %>% select(-X)
 
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
 write.csv(df_select, "df_select.csv")
 
 

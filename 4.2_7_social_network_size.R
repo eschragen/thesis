@@ -18,7 +18,7 @@ token = create_token(
   access_secret = access_token_secret)
 
 #import all tweets
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
 df = read_csv("df_nonequal_size")
 
 df_user = df %>% select(username) 
@@ -26,8 +26,6 @@ df_user = df_user[!duplicated(df_user$username),]
 df_user = df_user$username
 
 ####Get User ID in multiple batches####
-# #1:17181
-# 
 # user_id = NA
 # 
 # for (i in 1:length(df_user)) {
@@ -221,7 +219,6 @@ df_user = df_user$username
 # 
 # 
 # #check missing users
-# setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
 # df = read_csv("df_nonequal_size")
 # 
 # df_user = df %>% select(username) 
@@ -274,7 +271,6 @@ df_user = df_user$username
 # user_metadata = user_metadata[!duplicated(user_metadata$id),]
 
 # #check missing users
-# setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
 # df = read_csv("df_nonequal_size")
 # 
 # df_user = df %>% select(username) 
@@ -290,8 +286,7 @@ df_user = df_user$username
 # user_metadata = user_metadata %>% select(-X1) 
 # 
 # user_metadata$username = tolower(user_metadata$username) #Replace to lower words
-# 
-# setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
+
 # write.csv(user_metadata, "user_metadata.csv")
 
 

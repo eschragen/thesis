@@ -6,18 +6,18 @@ library(data.table)
 library(hrbrthemes)
 
 #load datasets
-setwd("~/GitHub/twint/outputs")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/twint_scraping_outputs/keywords")
 
-#determine year of analysis with greenwashing df
+#determine year of analysis with greenwashing df for every company seperately
 company = read_csv("vw_greenwashing.csv")
 
 tweetfrequencies = company %>% group_by(date) %>% count() 
 
-years = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/year2015_2021.csv")
+years = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints/year2015_2021.csv")
 tweetsperday = years %>% left_join(tweetfrequencies, by = "date") 
 tweetsperday[is.na(tweetsperday)] = 0
 
-#ggplot(tweetsperday, aes(x = date, y = n)) + ggtitle("Tweet Frequencies") + geom_line(color = "#69b3a2", size = 1) +   theme_ipsum()
+ggplot(tweetsperday, aes(x = date, y = n)) + ggtitle("Tweet Frequencies") + geom_line(color = "#69b3a2", size = 1) +   theme_ipsum()
 
 #how many tweets in sum for the next 365 days?
 setDT(tweetsperday)[, sums := frollsum(n, 365)]

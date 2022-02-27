@@ -6,10 +6,10 @@ library(wordcloud)
 library(dplyr)
 library(ggplot2)
 library(textstem)
-options(scipen=999) #avoid scientific notations (e.g. e+18)
+options(scipen=999) 
 library(qdapRegex)
 
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA")
+setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
 df = read_csv("df_nonequal_size_subsetVW.csv")
 
 tweets_subset = df %>% select(id, tweet) 
@@ -51,6 +51,6 @@ tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed, removeWords, stopwords("en
 tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed, stemDocument)
 tweets_corpus_stemmed = tm_map(tweets_corpus_stemmed , stripWhitespace)
 
-save.image("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/tweets_decreasedVW_stemmed.RData")
+save.image("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints/tweets_decreasedVW_stemmed.RData")
 
 
