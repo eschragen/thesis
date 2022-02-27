@@ -1,7 +1,7 @@
-####Explanation of data source
-##twint_outputs: Scraping Outputs of every run per company (Greenwashing, Further Keywords/Hashtags)
+####Remarks for data sources
 ##data_breakingpoints: Created to retrace steps in between and return to the original state 
-#df_select: Final dataframe for Multiple Regression Analysis
+    #df_select: Final dataframe for Multiple Regression Analysis
+##twint_outputs: Scraping outputs of every run per company (Greenwashing, Further Keywords/Hashtags), postings on company pages, and replies to these postings
 
 #3.2_1_tweet_scraping
 Run python script for each company seperately on cmd after installing twint scraper (https://github.com/twintproject/twint)
