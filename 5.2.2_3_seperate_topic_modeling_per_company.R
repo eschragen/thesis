@@ -37,7 +37,6 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 #   verbose = TRUE
 # )
 # FindTopicsNumber_plot(result_shell)   #k = 4
-# save.image(file = "findtopicnumber_unilever.RData")
 # 
 # content_cocacola = content_stemmed %>% filter(company == "cocacola")
 # #create corpus
@@ -50,7 +49,7 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 # dtm_cocacola.new = dtm_cocacola[ui,]
 # #calculate scores for 2-50 topics
 # memory.limit(9999999999)
-# result_shell = FindTopicsNumber(
+# result_cocacola = FindTopicsNumber(
 #   dtm = dtm_cocacola.new,
 #   topics = seq(from = 2, to = 50, by = 1),
 #   metrics = c("Griffiths2004", "CaoJuan2009", "Arun2010", "Deveaud2014"),
@@ -60,8 +59,7 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 #   verbose = TRUE
 # )
 # 
-# FindTopicsNumber_plot(result_shell) ##wrongly assigned as shell ...k = 5
-# save.image(file = "findtopicnumber_cocacola.RData")
+# FindTopicsNumber_plot(result_cocacola) #k = 5
 # 
 # content_hm = content_stemmed %>% filter(company == "hm")
 # #create corpus
@@ -85,7 +83,6 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 # )
 # 
 # FindTopicsNumber_plot(result_hm) #k = 4
-# save.image(file = "findtopicnumber_hm.RData")
 # 
 # content_ikea = content_stemmed %>% filter(company == "ikea")
 # #create corpus
@@ -109,8 +106,6 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 # )
 # 
 # FindTopicsNumber_plot(result_ikea) #k = 7
-# save.image(file = "findtopicnumber_ikea.RData")
-# rm(list = ls())
 
 # content_nestle = content_stemmed %>% filter(company == "nestle") 
 # #create corpus
@@ -133,7 +128,6 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 #   verbose = TRUE
 # )
 # FindTopicsNumber_plot(result_nestle) #k = 4
-# save.image(file = "findtopicnumber_nestle.RData")
 
 # content_exxonmobil = content_stemmed %>% filter(company == "exxonmobil") %>% sample_n(15000)
 # #create corpus
@@ -156,7 +150,6 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 #   verbose = TRUE
 # )
 # FindTopicsNumber_plot(result_exxonmobil) #k = 6
-# save.image(file = "findtopicnumber_exxonmobil.RData")
 
 # content_shell = content_stemmed %>% filter(company == "shell") %>% sample_n(15000)
 # #create corpus
@@ -179,7 +172,6 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 #   verbose = TRUE
 # )
 # FindTopicsNumber_plot(result_shell) #k = 5
-# save.image(file = "findtopicnumber_shell.RData")
 # 
 # content_vw = content_stemmed %>% filter(company == "vw") %>% sample_n(15000)
 # #create corpus
@@ -202,7 +194,6 @@ load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topi
 #   verbose = TRUE
 # )
 # FindTopicsNumber_plot(result_shell) #k = 6
-# save.image(file = "findtopicnumber_vw.RData")
 
 ####run topic modeling per company####
 load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company/lda4_topics.RData")
@@ -465,52 +456,7 @@ colnames(topics_vw) = c("id","topic")
 write.csv(topics_vw, "topics_vw.csv")
 
 
-
-####visualize find k####
-
-#highlight selected k per company
-#cocacola 5,exxon 6, h&m4,ikea 7, nestle 4, shell 5, unilever 4, vw 7 
-
-###visualize topic results
-setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company")
-results = read_csv("results_topicmodeling_seperat.csv")
-
-results$k = FALSE
-results$k[results$company == "vw" & results$topics == 6]=TRUE
-results$k[results$company == "cocacola" & results$topics == 5]=TRUE
-results$k[results$company == "exxonmobil" & results$topics == 6]=TRUE
-results$k[results$company == "hm" & results$topics == 4]=TRUE
-results$k[results$company == "ikea" & results$topics == 7]=TRUE
-results$k[results$company == "nestle" & results$topics == 4]=TRUE
-results$k[results$company == "shell" & results$topics == 5]=TRUE
-results$k[results$company == "unilever" & results$topics == 4]=TRUE
-
-results$company[results$company == "vw"]= "VW"
-results$company[results$company == "cocacola"]="Coca Cola"
-results$company[results$company == "exxonmobil"]="Exxonmobil"
-results$company[results$company == "hm"]="H&M"
-results$company[results$company == "ikea"]="IKEA"
-results$company[results$company == "nestle"]="Nestle"
-results$company[results$company == "shell"]="Shell"
-results$company[results$company == "unilever"]="Unilever"
-
-results %>% filter(topics <= 10 & topics > 2) %>%
-  ggplot(aes(x=topics,y=CaoJuan2009, shape = company)) +
-  geom_line(color = "#8F8888", alpha = .5) + 
-  geom_point(aes(color = k), size = 3) +
-  scale_shape_manual(values=c(15,16,17,18,10,8,4,12))+
-  scale_color_manual(values=c("#C3BCBC","black"))+
-  theme_bw()+
-  labs(color="Selected k", shape = "Company") + xlab("k")+
-  ylab("Topic Density")+
-  theme(axis.text=element_text(size=14),
-        axis.title=element_text(size=14),
-        legend.text = element_text(size=12),
-        legend.title = element_text(size=12))
-
-
-
-####save topic modeling results####
+####save topic modeling results for manual labeling####
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/Data Analytics/DATA/topicmodeling_per_company")
 
 content_stemmed = read_csv("content_stemmed.csv")
@@ -534,9 +480,7 @@ lda_unilever = LDA(dtm_unilever.new, k = k_unilever, method = 'Gibbs',
 
 top30terms_unilever = as.data.frame(terms(lda_unilever,30))
 writexl::write_xlsx(top30terms_unilever, "top30terms_unilever.xlsx")
-save.image(file = "lda_unilever.RData")
 
-rm(list=ls())
 
 content_stemmed = read_csv("content_stemmed.csv")
 content_cocacola = content_stemmed %>% filter(company == "cocacola")
@@ -558,10 +502,6 @@ lda_cocacola = LDA(dtm_cocacola.new, k = k_cocacola, method = 'Gibbs',
                          best = TRUE, thin = 500, burnin = 4000, iter = 1000))
 top30terms_cocacola = as.data.frame(terms(lda_cocacola,30))
 writexl::write_xlsx(top30terms_cocacola, "top30terms_cocacola.xlsx")
-save.image(file = "lda_cocacola.RData")
-
-rm(list=ls())
-
 
 
 content_stemmed = read_csv("content_stemmed.csv")
@@ -584,10 +524,6 @@ lda_hm = LDA(dtm_hm.new, k = k_hm, method = 'Gibbs',
                          best = TRUE, thin = 500, burnin = 4000, iter = 1000))
 top30terms_hm = as.data.frame(terms(lda_hm,30))
 writexl::write_xlsx(top30terms_hm, "top30terms_hm.xlsx")
-save.image(file = "lda_hm.RData")
-
-rm(list=ls())
-
 
 content_stemmed = read_csv("content_stemmed.csv")
 content_ikea = content_stemmed %>% filter(company == "ikea")
@@ -609,9 +545,6 @@ lda_ikea = LDA(dtm_ikea.new, k = k_ikea, method = 'Gibbs',
                          best = TRUE, thin = 500, burnin = 4000, iter = 1000))
 top30terms_ikea = as.data.frame(terms(lda_ikea,30))
 writexl::write_xlsx(top30terms_ikea, "top30terms_ikea.xlsx")
-save.image(file = "lda_ikea.RData")
-
-rm(list=ls())
 
 
 content_stemmed = read_csv("content_stemmed.csv")
@@ -634,10 +567,6 @@ lda_nestle = LDA(dtm_nestle.new, k = k_nestle, method = 'Gibbs',
                          best = TRUE, thin = 500, burnin = 4000, iter = 1000))
 top30terms_nestle = as.data.frame(terms(lda_nestle,30))
 writexl::write_xlsx(top30terms_nestle, "top30terms_nestle.xlsx")
-save.image(file = "lda_nestle.RData")
-
-rm(list=ls())
-
 
 
 content_stemmed = read_csv("content_stemmed.csv")
@@ -660,9 +589,6 @@ lda_exxonmobil = LDA(dtm_exxonmobil.new, k = k_exxonmobil, method = 'Gibbs',
                          best = TRUE, thin = 500, burnin = 4000, iter = 1000))
 top30terms_exxonmobil = as.data.frame(terms(lda_exxonmobil,30))
 writexl::write_xlsx(top30terms_exxonmobil, "top30terms_exxonmobil.xlsx")
-save.image(file = "lda_exxonmobil.RData")
-
-rm(list=ls())
 
 content_stemmed = read_csv("content_stemmed.csv")
 content_shell = content_stemmed %>% filter(company == "shell")
@@ -683,10 +609,9 @@ lda_shell = LDA(dtm_shell.new, k = k_shell, method = 'Gibbs',
           control = list(nstart = 5, seed = list(1505,99,36,56,88),
                          best = TRUE, thin = 500, burnin = 4000, iter = 1000))
 
-save.image(file = "lda_shell.RData")
 top30terms_shell = as.data.frame(terms(lda_shell,30))
 writexl::write_xlsx(top30terms_shell, "top30terms_shell.xlsx")
-rm(list=ls())
+
 
 
 
@@ -709,7 +634,5 @@ lda_vw = LDA(dtm_vw.new, k = k_vw, method = 'Gibbs',
           control = list(nstart = 5, seed = list(1505,99,36,56,88),
                          best = TRUE, thin = 500, burnin = 4000, iter = 1000))
 
-save.image(file = "lda_vw.RData")
 top30terms_vw = as.data.frame(terms(lda_vw,30))
 writexl::write_xlsx(top30terms_vw, "top30terms_vw.xlsx")
-rm(list=ls())

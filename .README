@@ -1,6 +1,6 @@
 ####Explanation of data source
 ##twint_outputs: Scraping Outputs of every run per company (Greenwashing, Further Keywords/Hashtags)
-##data_breakingpoints: Created to be able to retrace steps in between and return to the original state 
+##data_breakingpoints: Created to retrace steps in between and return to the original state 
 #df_select: Final dataframe for Multiple Regression Analysis
 
 #3.2_1_tweet_scraping
@@ -56,7 +56,20 @@ Compute variables: industry_brown, green_ad, max_morality
 #5.1_2_descriptive_analyses
 Summary statistics for categorical and metric variables. Visualize mean differences of moral outrage per company.
 
+#5.2.1_multiple_regression_analysis
+Test assumptions and run regression analysis afterwards
 
+#5.2.2_1_regression_per_foundation
+For every moral foundation as dependent variable, regression is run seperately including assumption testing
+
+#5.2.2_2_regression_per_company
+For every company as single database, regression is run seperately, including assumption testing
+
+#5.2.2_3_seperate_topic_modeling_per_company
+Run topic modeling for every company seperately after finding optimal k
+
+#5.2.2_4_regression_per_company_new_topics
+New topics are included in seperate regression analysis per company
 
 
 

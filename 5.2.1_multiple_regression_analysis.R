@@ -75,6 +75,9 @@ fit2 = lm(moral_outrage ~
             relevel(max_morality, ref = "intensity_fairness"),
             data = df_new2)
 
+#create summary statistics
+summ(fit2)
+
 ####1. LINEARITY####
 
 #Linearity between predictors and outcome variable (Residuals vs Fitted plot)
@@ -85,294 +88,21 @@ fit2 = lm(moral_outrage ~
 #Normality of Residuals (Normal probability plot of residuals)
 # #Check: Points fall approx. along reference line
 # #Swings at left & right = Distribution of residuals heavier-tailed than theoretical distribution
-svg("C:\\Users\\eva_s\\OneDrive\\MASTER\\5. Semester_THESIS\\Figures\\Assumptions\\4_normality_QQ.svg",bg = "transparent")
-print(
-  plot(fit2, 2)
-)
-dev.off()
+#plot(fit2, 2,sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3)
+
 # #Generate histogram of residual distribution
-library(MASS)
-
-# sresid = studres(fit2)
-# svg("C:\\Users\\eva_s\\OneDrive\\MASTER\\5. Semester_THESIS\\Figures\\Assumptions\\4_normality_distribution.svg",bg = "transparent")
-# print(
-#   hist(sresid, freq=FALSE,main="Distribution of Studentized Residuals", xlab = "Studentized Residuals"),
-#   xfit=seq(min(sresid),max(sresid),length=40),
-#   yfit=dnorm(xfit),
-#   lines(xfit, yfit)
-# )
-# dev.off()
-
-standres = stdres(fit)
-svg("C:\\Users\\eva_s\\OneDrive\\MASTER\\5. Semester_THESIS\\Figures\\Assumptions\\4_normality_distribution_standardized.svg",bg = "transparent")
-print(
-  hist(standres, freq=FALSE,main="Distribution of Standardized Residuals", xlab = "Standardized Residuals"),
-  xfit=seq(min(standres),max(standres),length=40),
-  yfit=dnorm(xfit),
-  lines(xfit, yfit)
-)
-dev.off()
+# sresid = MASS::studres(fit2)
+# hist(sresid, freq=FALSE,main="Distribution of Studentized Residuals", xlab = "Studentized Residuals")
+# xfit=seq(min(sresid),max(sresid),length=40)
+# yfit=dnorm(xfit)
+# lines(xfit, yfit)
 
 ####3. HOMOSCEDASTICITY####
 #Nonconstant Error Variance (Scale/Spread-location plot)
 # #Horizontal line with equally spread points = residuals spread equally along ranges of predictors = Homogeneity of Variance
-plot(fit2,3, sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3)
-
-
-#ncvTest: p < 0.05 = Data is not homoscedastic :-(
-library(car)
-ncvTest(fit2)
-#Check if roughly equally distributed across the range of the fitted Y values (straight line)
-#spreadLevelPlot(fit2)
+#plot(fit2,3, sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3)
 
 ####4. MULTICOLLINEARITY####
 #Check VIF values (<5!)
-omcdiag(fit2)
-imcdiag(fit2)
-
-
-
-
-####COMPARE COMPANIES####
-cocacola = df_new %>% filter(company == "cocacola")
-fit_cocacola = lm(moral_outrage ~ 
-            negativeWOM_volume +
-            relevel(max_morality, ref = "intensity_fairness")+ 
-            relevel(topic, ref = "4") +
-            followers + following, 
-            data = cocacola)
-
-
-#add specific topics
-topics_cocacola = read_csv("topics_cocacola.csv")
-topics_cocacola = topics_cocacola %>% select(-X1)
-colnames(topics_cocacola) = c("id","topic_individual")
-cocacola = cocacola %>% left_join(topics_cocacola, by = "id")
-cocacola$topic_individual = as.factor(cocacola$topic_individual)
-
-fit_cocacola_new = lm(moral_outrage ~ 
-                    negativeWOM_volume +
-                    relevel(max_morality, ref = "intensity_fairness")+
-                    relevel(topic_individual, ref = "4") +
-                    followers + following, 
-                    data = cocacola)
-
-
-vw = df_new2 %>% filter(company == "vw")
-fit_vw= lm(moral_outrage ~ 
-                    
-                    negativeWOM_volume +
-             relevel(max_morality, ref = "intensity_fairness")+ 
-             relevel(topic, ref = "4") +
-                    followers + following, 
-                  data = vw)
-
-#add specific topics
-topics_vw = read_csv("topics_vw.csv")
-topics_vw = topics_vw %>% select(-X1)
-colnames(topics_vw) = c("id","topic_individual")
-vw = vw %>% left_join(topics_vw, by = "id")
-vw$topic_individual = as.factor(vw$topic_individual)
-
-fit_vw_new = lm(moral_outrage ~ 
-                        negativeWOM_volume +
-                        relevel(max_morality, ref = "intensity_fairness")+ 
-                  relevel(topic_individual, ref = "5") +
-                  followers + following, 
-                      data = vw)
-
-exxonmobil = df_new2 %>% filter(company == "exxonmobil")
-fit_exxonmobil= lm(moral_outrage ~ 
-             
-             negativeWOM_volume +
-               relevel(max_morality, ref = "intensity_fairness")+ 
-               relevel(topic, ref = "4") +
-             followers + following, 
-           data = exxonmobil)
-
-#add specific topics
-topics_exxonmobil = read_csv("topics_exxonmobil.csv")
-topics_exxonmobil = topics_exxonmobil %>% select(-X1)
-colnames(topics_exxonmobil) = c("id","topic_individual")
-exxonmobil = exxonmobil %>% left_join(topics_exxonmobil, by = "id")
-exxonmobil$topic_individual = as.factor(exxonmobil$topic_individual)
-
-fit_exxonmobil_new = lm(moral_outrage ~ 
-                        negativeWOM_volume +
-                        relevel(max_morality, ref = "intensity_fairness")+ 
-                          relevel(topic_individual, ref = "5") +
-                          followers + following, 
-                      data = exxonmobil)
-
-shell = df_new2 %>% filter(company == "shell")
-fit_shell= lm(moral_outrage ~ 
-             
-             negativeWOM_volume +
-               relevel(max_morality, ref = "intensity_fairness")+ 
-               relevel(topic, ref = "4") +
-             followers + following, 
-           data = shell)
-
-#add specific topics
-topics_shell = read_csv("topics_shell.csv")
-topics_shell = topics_shell %>% select(-X1)
-colnames(topics_shell) = c("id","topic_individual")
-shell = shell %>% left_join(topics_shell, by = "id")
-shell$topic_individual = as.factor(shell$topic_individual)
-
-fit_shell_new = lm(moral_outrage ~ 
-                        negativeWOM_volume +
-                        relevel(max_morality, ref = "intensity_fairness")+ 
-                     relevel(topic_individual, ref = "2") +
-                     followers + following, 
-                      data = shell)
-
-nestle = df_new2 %>% filter(company == "nestle")
-fit_nestle= lm(moral_outrage ~ 
-             
-             negativeWOM_volume +
-               relevel(max_morality, ref = "intensity_fairness")+ 
-               relevel(topic, ref = "4") +
-             followers + following, 
-           data = nestle)
-
-#add specific topics
-topics_nestle = read_csv("topics_nestle.csv")
-topics_nestle = topics_nestle %>% select(-X1)
-colnames(topics_nestle) = c("id","topic_individual")
-nestle = nestle %>% left_join(topics_nestle, by = "id")
-nestle$topic_individual = as.factor(nestle$topic_individual)
-
-fit_nestle_new = lm(moral_outrage ~ 
-                        negativeWOM_volume +
-                        relevel(max_morality, ref = "intensity_fairness")+ 
-                      relevel(topic_individual, ref = "1") +
-                      followers + following, 
-                      data = nestle)
-
-hm = df_new2 %>% filter(company == "hm")
-fit_hm= lm(moral_outrage ~ 
-                 
-                 negativeWOM_volume +
-             relevel(max_morality, ref = "intensity_fairness")+ 
-             relevel(topic, ref = "4") +
-                 followers + following, 
-               data = hm)
-
-#add specific topics
-topics_hm = read_csv("topics_hm.csv")
-topics_hm = topics_hm %>% select(-X1)
-colnames(topics_hm) = c("id","topic_individual")
-hm = hm %>% left_join(topics_hm, by = "id")
-hm$topic_individual = as.factor(hm$topic_individual)
-
-fit_hm_new = lm(moral_outrage ~ 
-                        negativeWOM_volume +
-                        relevel(max_morality, ref = "intensity_fairness")+ 
-                  relevel(topic_individual, ref = "2") +
-                  followers + following, 
-                      data = hm)
-
-unilever = df_new2 %>% filter(company == "unilever")
-fit_unilever= lm(moral_outrage ~ 
-                 
-                 negativeWOM_volume +
-                   relevel(max_morality, ref = "intensity_fairness")+ 
-                   relevel(topic, ref = "4") +
-                 followers + following, 
-               data = unilever)
-
-#add specific topics
-topics_unilever = read_csv("topics_unilever.csv")
-topics_unilever = topics_unilever %>% select(-X1)
-colnames(topics_unilever) = c("id","topic_individual")
-unilever = unilever %>% left_join(topics_unilever, by = "id")
-unilever$topic_individual = as.factor(unilever$topic_individual)
-
-fit_unilever_new = lm(moral_outrage ~ 
-                        negativeWOM_volume +
-                        relevel(max_morality, ref = "intensity_fairness")+ 
-                        relevel(topic_individual, ref = "4") +
-                        followers + following, 
-                      data = unilever)
-
-ikea = df_new2 %>% filter(company == "ikea")
-fit_ikea= lm(moral_outrage ~ 
-                 
-                 negativeWOM_volume +
-               relevel(max_morality, ref = "intensity_fairness")+ 
-               relevel(topic, ref = "4") +
-                 followers + following, 
-               data = ikea)
-
-#add specific topics
-topics_ikea = read_csv("topics_ikea.csv")
-topics_ikea = topics_ikea %>% select(-X1)
-colnames(topics_ikea) = c("id","topic_individual")
-ikea = ikea %>% left_join(topics_ikea, by = "id")
-ikea$topic_individual = as.factor(ikea$topic_individual)
-
-fit_ikea_new = lm(moral_outrage ~ 
-                        negativeWOM_volume +
-                        relevel(max_morality, ref = "intensity_fairness")+ 
-                    relevel(topic_individual, ref = "2") +
-                    followers + following, 
-                      data = ikea)
-
-
-
-compare_company = export_summs(fit_cocacola,fit_exxonmobil,fit_hm,fit_ikea,fit_nestle,fit_shell,fit_unilever,fit_vw,
-             model.names = c("Coca Cola", "Exxonmobil", "H&M","IKEA","Nestle","Shell","Unilever","Volkswagen"))
-
-
-compare_company_new = export_summs(fit_cocacola_new,fit_exxonmobil_new,fit_hm_new,fit_ikea_new,fit_nestle_new,fit_shell_new,fit_unilever_new,fit_vw_new,
-                               model.names = c("Coca Cola", "Exxonmobil", "H&M","IKEA","Nestle","Shell","Unilever","Volkswagen"))
-
-
-
-####COMPARE FOUNDATIONS####
-df_foundations =  df_new2 %>% mutate(
-                  fairness.vice_100 = 100*fairness.vice,
-                   loyalty.vice_100= 100*loyalty.vice,
-                   sanctity.vice_100= 100*sanctity.vice,
-                   authority.vice_100 = 100*authority.vice,
-                   care.vice_100 = 100*care.vice) 
-
-fit_fairness = lm(fairness.vice_100 ~ 
-            industry_brown  + industry_brown*green_ad +
-            negativeWOM_volume +
-            relevel(topic, ref = "4") +
-            followers + following, 
-            data = df_foundations)
-
-fit_loyalty = lm(loyalty.vice_100 ~ 
-                    industry_brown  + industry_brown*green_ad +
-                    negativeWOM_volume +
-                    relevel(topic, ref = "4") +
-                    followers + following, 
-                  data = df_foundations)
-
-fit_sanctity = lm(sanctity.vice_100 ~ 
-                    industry_brown  + industry_brown*green_ad +
-                    negativeWOM_volume +
-                    relevel(topic, ref = "4") +
-                    followers + following, 
-                  data = df_foundations)
-
-fit_authority = lm(authority.vice_100 ~ 
-                    industry_brown  + industry_brown*green_ad +
-                    negativeWOM_volume +
-                    relevel(topic, ref = "4") +
-                    followers + following, 
-                  data = df_foundations)
-
-fit_care = lm(care.vice_100 ~ 
-                     industry_brown  + industry_brown*green_ad +
-                     negativeWOM_volume +
-                     relevel(topic, ref = "4") +
-                     followers + following, 
-                   data = df_foundations)
-
-compare_foundations = export_summs(fit_fairness, fit_loyalty,fit_sanctity,fit_authority,fit_care,
-                                   model.names = c("Fairness","Loyalty","Sanctity","Authority","Care"), digits = 5)
-compare_foundations
+# omcdiag(fit2)
+# imcdiag(fit2)
