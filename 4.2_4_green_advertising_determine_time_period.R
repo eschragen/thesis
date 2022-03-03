@@ -121,21 +121,28 @@ df_date = read_csv("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_
 require(dplyr)
 df_cumulated = df_date %>% group_by(conversation_id) %>% mutate(csum = cumsum(n),
                                                                 csum_percentage = 100*cumsum(n)/sum(n))
+df_cumulated$conversation_id =as.factor(df_cumulated$conversation_id)
 
 df_cumulated %>% filter(conversation_id != "1438484481036492805") %>% #filter out extreme case (detected visually)
   ggplot(aes(x=day, y = csum_percentage, color = conversation_id)) + geom_line() +
   scale_fill_viridis(discrete = TRUE) +
   theme(legend.position="none") +
-  theme_ipsum() +
   ylab("Cumulated % of Comments")+
-  xlab("Day") +
+  xlab("Day") + 
+  geom_vline(xintercept = 7, linetype = "dashed",color = "red", size = 1.3) +
+  scale_x_continuous(breaks = seq(0, 100, by = 10)) +
+  geom_text(x = 13, y = 10,label = "Considered\nTimeframe:\n7 Days",color="red",size = 5.5)+  
   theme(
     legend.position="none",
     panel.spacing = unit(0.1, "lines"),
-    strip.text.x = element_text(size = 10),
-    plot.title = element_text(size=10), 
-    text=element_text(size=8,  family="sans")) #+
-    #scale_color_grey(start = 0.8, end = 0.2)
+    strip.text.x = element_text(size = 16),
+    plot.title = element_text(size=16), 
+    text = element_text(size = 18),
+    panel.background = element_rect(fill = "transparent"),
+    panel.grid.major.x =  element_line(size = .1,color="lightgrey"),
+    panel.grid.minor.x =  element_line(size = .1,color="lightgrey"),
+    panel.border = element_rect(colour = "black",fill=NA,size = 1)) +
+  scale_color_grey(start = 0.8, end = 0.2) 
 
 
 #boxplot: identify outliers --> 95 quantile at 42 days

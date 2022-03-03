@@ -75,18 +75,48 @@ df %>% filter(!is.na(topic)) %>% group_by(topic) %>% count() %>% mutate(ratio = 
 
 df %>% filter(!is.na(max_morality)) %>% group_by(max_morality) %>% count() %>% mutate(ratio = n/nrow(df))
 
+#examine green advertising strategy per company
+library(readxl)
+postings_combined = read_excel("postings_combined.xlsx")
+postings_combined %>% group_by(company) %>% count(env_claim_made) %>% mutate(ratio = n/365)
+postings_boolean = postings_combined %>% group_by(company) %>% count(env_claim_made) %>% mutate(ratio = round(100*(n/365),0))
+postings_boolean$Advertising = NA
+postings_boolean$Advertising[postings_boolean$env_claim_made == 1] = "Green Advertising"
+postings_boolean$Advertising[postings_boolean$env_claim_made == 0] = "No/General Advertising"
+postings_boolean$company = as.factor(postings_boolean$company)
+levels(postings_boolean$company) =  c("Coca-Cola", "ExxonMobil", "H&M", "IKEA", "Nestlé","Shell","Unilever","VW")
+postings_boolean %>%
+    ggplot(aes(x="", y=n, fill=Advertising)) +
+    geom_bar(stat="identity", width=1) +
+    coord_polar("y", start=0)+
+    theme(legend.position="none") +
+    theme_void() +
+    xlab("Count") +
+    theme(
+      legend.position="right",
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 16),
+      plot.title = element_text(size=16), 
+      text=element_text(size=16,  family="sans")
+      
+    ) + facet_wrap(~company, nrow = 2) +
+  geom_label(aes(label = paste(ratio,"%",sep = " ")),
+             position = position_stack(vjust = 0.5),show.legend = FALSE) +
+  scale_fill_manual(values = c("darkgrey","lightgrey")) +
+  theme(legend.position ="bottom",legend.title = element_blank())
+
 ###visualization moral outrage per company####
 df_company = df
-levels(df_company$company) = c("Coca Cola", "Exxonmobil", "H&M", "IKEA", "Nestle","Shell","Unilever","Volkswagen")
+df_company$company = as.factor(df_company$company)
+levels(df_company$company) =  c("Coca-Cola", "ExxonMobil", "H&M", "IKEA", "Nestlé","Shell","Unilever","Volkswagen")
 df_company$industry_brown = factor(df_company$industry_brown, levels = c("TRUE", "FALSE"))
-
 
 #boxplot of moral outrage per company
 moraloutrage_percompany = df_company %>% filter(vice_sum_100 <= quantile(vice_sum_100, 0.99)) %>%
   ggplot(aes(x = fct_reorder(company,vice_sum_100), y = vice_sum_100, fill = industry_brown)) + 
-  geom_boxplot(outlier.shape = NA, width = 0.5) + xlab("") + ylab("Moral Outrage") +
-  theme_bw()  + scale_fill_manual(values=c( "#D2B48C","#b6b6b6")) + labs(fill = "Brown Industry")
-
+  geom_boxplot(outlier.shape = NA, width = .7) + xlab("") + ylab("Moral Outrage") + 
+  theme_bw()  + theme(text = element_text(size = 16)) + scale_fill_manual(values=c("#D2B48C","#b6b6b6")) + labs(fill = "Brown Industry")
+  
 moraloutrage_percompany + coord_flip(ylim = c(0, 10))
 
 

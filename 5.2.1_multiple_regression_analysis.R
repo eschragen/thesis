@@ -50,14 +50,23 @@ fit = lm(moral_outrage ~
 
 ####0. UNUSUAL OBSERVATIONS####
 # #Plot studentized residuals vs. fitted values
-# stud_resids_df = as.data.frame(cbind(MASS::studres(fit), fitted(fit)))
-# colnames(stud_resids_df) = c("stud_res","fitted_values")
-# 
-# ggplot(stud_resids_df, aes(x = fitted_values, y = stud_res)) + geom_point() +
-#   geom_hline(yintercept = 3, col = "red",lty = 2,lwd = 1) + xlab("Fitted Values") + ylab("Studentized Residuals") +
-#   hrbrthemes::theme_ipsum(base_size =16,axis_title_size = 18)
+stud_resids_df = as.data.frame(cbind(MASS::studres(fit), fitted(fit)))
+colnames(stud_resids_df) = c("stud_res","fitted_values")
+
+ggplot(stud_resids_df, aes(x = fitted_values, y = stud_res)) + geom_point() +
+  geom_hline(yintercept = 3, col = "red",lty = 2,lwd = 1) + xlab("Fitted Values") + ylab("Studentized Residuals") +
+  geom_text(x = .7, y = 3.3,label = "Threshold",color="red",size = 5.5)+
+  theme(
+    panel.spacing = unit(0.1, "lines"),
+    strip.text.x = element_text(size = 16),
+    plot.title = element_text(size=16), 
+    text = element_text(size = 18),
+    panel.background = element_rect(fill = "transparent"),
+    panel.grid.major.x =  element_blank(),
+    panel.grid.major.y =  element_blank(),
+    panel.border = element_rect(colour = "black",fill=NA,size = 1)) 
 #  
-# plot(fit, 4, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, cex.id = 1, sub.caption = NA, caption = NA, id.n= 0)
+plot(fit, 4, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, cex.id = 1, sub.caption = NA, caption = NA, id.n= 0)
 
 #extract top 10 highest cooks distance
 top10cooks = df_new[c(which(rownames(df_new) %in% names(sort(cooks.distance(fit), decreasing = T)[1:10]))),]
@@ -82,25 +91,25 @@ summ(fit2, digits = 4)
 ####1. LINEARITY####
 #Linearity between predictors and outcome variable (Residuals vs Fitted plot)
 ##Check: No fitted pattern (Red line approx. horizontal at Zero)
-#plot(fit2,1, sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3)
+plot(fit2,1, sub.caption = NA ,  caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3)
 
 ####2. NORMALITYY#### 
 #Normality of Residuals (Normal probability plot of residuals)
 # #Check: Points fall approx. along reference line
 # #Swings at left & right = Distribution of residuals heavier-tailed than theoretical distribution
-#plot(fit2, 2,sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3)
+plot(fit2, 2,sub.caption = NA , caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3,id.n = 0)
 
-# #Generate histogram of residual distribution
-# sresid = MASS::studres(fit2)
-# hist(sresid, freq=FALSE,main="Distribution of Studentized Residuals", xlab = "Studentized Residuals")
-# xfit=seq(min(sresid),max(sresid),length=40)
-# yfit=dnorm(xfit)
-# lines(xfit, yfit)
+# #Generate histogram of residual distribution (main="Distribution of Studentized Residuals")
+sresid = MASS::studres(fit2)
+hist(sresid, freq=FALSE,xlab = "Studentized Residuals", main = NA, cex.lab = 1.5,cex.axis = 1.5)
+xfit=seq(min(sresid),max(sresid),length=40)
+yfit=dnorm(xfit)
+lines(xfit, yfit)
 
 ####3. HOMOSCEDASTICITY####
 #Nonconstant Error Variance (Scale/Spread-location plot)
 # #Horizontal line with equally spread points = residuals spread equally along ranges of predictors = Homogeneity of Variance
-#plot(fit2,3, sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3)
+plot(fit2,3, sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, lwd = 3, caption = NA, id.n = 0)
 
 ####4. MULTICOLLINEARITY####
 #Check VIF values (<5!)

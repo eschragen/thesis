@@ -2,6 +2,8 @@ library(readxl)
 library(tidyverse)
 library(data.table)
 library(writexl)
+library(ggplot2)
+library(hrbrthemes)
 
 ####import data####
 setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints")
@@ -285,11 +287,9 @@ df_vw$env_claim_made[df_vw$total_env_posts_perweek != 0] = 1
 df_vw = df_vw[32:396,]
 df_vw = df_vw %>% mutate(day = row_number(), company = "vw")
 
+postings_combined = rbind(df_nestle, df_cocacola, df_ikea, df_exxonmobil, df_hm, df_shell, df_unilever, df_vw)
 
 # ####VISUALIZATION####
-# library(ggplot2)
-# library(hrbrthemes)
-# postings_combined = rbind(df_nestle, df_cocacola, df_ikea, df_exxonmobil, df_hm, df_shell, df_unilever, df_vw)
 # total_env_combined = postings_combined %>%  ggplot(aes(x=day, y=total_env_posts_perweek, group=company, color=company)) +
 #   geom_line(lwd = .8) + ylab("Count") + xlab("Day")
 # total_env_combined

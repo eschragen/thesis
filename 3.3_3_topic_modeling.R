@@ -10,6 +10,7 @@ library(ldatuning)
 library(hrbrthemes)
 library(udpipe)
 library(data.table)
+library(patchwork)
 
 #####PREPARE DTM####
 load("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoints/tweets_decreasedVW_stemmed.RData")
@@ -81,6 +82,29 @@ FindTopicsNumber_plot(result_subset) #best k = 4
 
 save.image(file = "findtopicnumber_shell_cleaned.RData")
 
+#VISUALIZE
+load("findtopicnumber_shell_cleaned.RData")
+min_max = function(x) {(x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))}
+result_subset_norm = as.data.frame(lapply(result_subset[,-1], min_max))
+result_subset_norm = cbind(result_subset[,1],result_subset_norm)
+colnames(result_subset_norm)[1] = "topics"
+findk_melt = reshape2::melt(result_subset_norm, id.var = "topics")
+findk_melt$metric[findk_melt$variable == "CaoJuan2009" | findk_melt$variable == "Arun2010"] = "Minimize"
+findk_melt$metric[findk_melt$variable == "Deveaud2014" | findk_melt$variable == "Griffiths2004"] = "Maximize"
+
+#MINIMIZE: CaoJuan2009, Arun2010
+findk_plot = findk_melt %>%
+ggplot(aes(x=topics, y=value,shape = variable)) + geom_line() + geom_point(size = 2)+
+  theme_bw()  + theme(text = element_text(size = 20),panel.grid.major.x = element_line(size = .8,color="darkgrey"),
+                      panel.grid.minor.x = element_line(size = .8,color="darkgrey"),
+                      panel.grid.major.y = element_blank() ,
+                      panel.grid.minor.y = element_blank() )+
+  xlab("#Topics") + ylab("Value") + labs(shape = "Metrics")+
+  facet_grid(rows = vars(metric))+
+  scale_x_continuous(breaks = seq(2, 50, by = 2),expand = c(0, 0))
+findk_plot
+
+
 ####RUN TOPIC MODELING####
 k = 4
 
@@ -125,3 +149,36 @@ topicprob = cbind(tweets_subset_topics, topicprob)
 topicprob_df = topicprob %>% select(-tweet_stemmed)
 colnames(topicprob_df) = c("id","topic","topic1","topic2","topic3","topic4")
 write.csv(topicprob_df, "topicprob_df.csv")
+
+#Visualize 4 Topics
+load("lda4_topics.RData")
+#Beta probabilities for each word
+word_topicprob = tidytext::tidy(lda, matrix = "beta")
+
+top_terms_per_topic = word_topicprob %>%
+  group_by(topic) %>%
+  slice_max(beta, n = 20) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+top_terms_per_topic$topic[top_terms_per_topic$topic == 1] = "Topic 1: Resource Utilization"
+top_terms_per_topic$topic[top_terms_per_topic$topic == 2] = "Topic 2: Corporate Greed"
+top_terms_per_topic$topic[top_terms_per_topic$topic == 3] = "Topic 3: Call to Action"
+top_terms_per_topic$topic[top_terms_per_topic$topic == 4] = "Topic 4: Future Impact"
+
+top_terms_per_topic %>% 
+  mutate(term = tidytext::reorder_within(term, beta, topic)) %>%
+  ggplot(aes(beta, term)) +
+  geom_col(show.legend = FALSE) +
+  tidytext::scale_y_reordered() +
+  xlab("Beta Value") + ylab("Term")+
+  scale_x_continuous(breaks = seq(0, 0.06, 0.02)) +
+  facet_wrap(~ topic, scale = "free_y") +
+  theme(strip.text.x = element_text(size = 16),
+        axis.text=element_text(size=14),
+        axis.title=element_text(size=14),
+        panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_line(size=.1, color="grey"),
+        panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+
