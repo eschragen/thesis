@@ -119,4 +119,31 @@ moraloutrage_percompany = df_company %>% filter(vice_sum_100 <= quantile(vice_su
   
 moraloutrage_percompany + coord_flip(ylim = c(0, 10))
 
+####visualization moral outrage per topic & foundation####
 
+df_categorical = df %>%
+  select(topic, max_morality, vice_sum_100)
+
+means_topic = aggregate(vice_sum_100 ~  topic, df_categorical, mean)
+topic_plot = df_categorical %>% filter(vice_sum_100 <= quantile(vice_sum_100, 1)) %>% 
+  ggplot(aes(y = vice_sum_100, x = topic)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topic") + coord_cartesian(ylim =  c(0, 10))+ 
+  stat_summary(fun="mean", size = .3)+ 
+  geom_text(size = 3.5, data = means_topic, aes(label = round(vice_sum_100,2), y = vice_sum_100 + 0.6))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
+
+means_morality = aggregate(vice_sum_100 ~  max_morality, df_categorical, mean)
+foundation_plot = df_categorical %>% 
+  ggplot(aes(y = vice_sum_100, x = max_morality)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Dominant Foundation") + coord_cartesian(ylim =  c(0, 10))+
+  stat_summary(fun="mean", size = .3)+ 
+  geom_text(size = 3.5, data = means_morality, aes(label = round(vice_sum_100,2), y = vice_sum_100 + 0.6))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
+
+topic_plot + foundation_plot
