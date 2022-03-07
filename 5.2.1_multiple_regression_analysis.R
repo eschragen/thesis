@@ -53,6 +53,10 @@ fit = lm(moral_outrage ~
 stud_resids_df = as.data.frame(cbind(MASS::studres(fit), fitted(fit)))
 colnames(stud_resids_df) = c("stud_res","fitted_values")
 
+# #count observations with |studentized residuals| > 3
+# outlier_n = stud_resids_df %>% filter(abs(stud_res) > 3) %>% nrow()     #1,317
+# outlier_n/nrow(stud_resids_df)
+
 ggplot(stud_resids_df, aes(x = fitted_values, y = stud_res)) + geom_point() +
   geom_hline(yintercept = 3, col = "red",lty = 2,lwd = 1) + xlab("Fitted Values") + ylab("Studentized Residuals") +
   geom_text(x = .7, y = 3.3,label = "Threshold",color="red",size = 5.5)+
@@ -65,8 +69,14 @@ ggplot(stud_resids_df, aes(x = fitted_values, y = stud_res)) + geom_point() +
     panel.grid.major.x =  element_blank(),
     panel.grid.major.y =  element_blank(),
     panel.border = element_rect(colour = "black",fill=NA,size = 1)) 
-#  
-plot(fit, 4, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, cex.id = 1, sub.caption = NA, caption = NA, id.n= 0)
+
+names = names(residuals(fit))
+cooks = as.data.frame(cooks.distance(fit))
+colnames(cooks) = "value"
+cooks$rank = rank(-cooks$value)
+cooks = cooks %>% mutate(id = paste("#",rank, sep =""))
+
+plot(fit, 4, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, cex.id = 1, sub.caption = NA, caption = NA, id.n= 10, labels.id = cooks$id)
 
 #extract top 10 highest cooks distance
 top10cooks = df_new[c(which(rownames(df_new) %in% names(sort(cooks.distance(fit), decreasing = T)[1:10]))),]
@@ -115,3 +125,28 @@ plot(fit2,3, sub.caption = NA , cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, l
 #Check VIF values (<5!)
 # omcdiag(fit2)
 # imcdiag(fit2)
+
+# #visualize interaction effect
+# df_interaction = df_new2 %>% select(green_ad, industry_brown, moral_outrage) %>%
+#   drop_na()
+# 
+# summary_interaction = df_interaction %>%
+#   group_by(green_ad, industry_brown) %>%
+#   summarise(outrage_mean = mean(moral_outrage),
+#             outrage_se = psych::describe(moral_outrage)$se)
+# summary_interaction %>% ggplot(aes(x = green_ad,y = outrage_mean,color = industry_brown)) +
+#   geom_line(aes(group = industry_brown), size = 1) +
+#   geom_point() +
+#   geom_errorbar(aes(ymin = outrage_mean - 1.96*outrage_se,
+#                     ymax = outrage_mean + 1.96*outrage_se),
+#                 width = .1, size =1) +
+#   labs(x = "Green Advertising", color = "Brown Industry", y = "Moral Outrage") +
+#   theme(
+#     panel.spacing = unit(0.1, "lines"),
+#     strip.text.x = element_text(size = 20),
+#     text = element_text(size = 24),
+#     panel.background = element_rect(fill = "transparent"),
+#     panel.grid.major.x =  element_blank(),
+#     panel.grid.major.y =  element_blank(),
+#     panel.border = element_rect(colour = "black",fill=NA,size = 1)) +
+#   scale_color_manual(values=c("#a9a9a9","#5C4033"))
