@@ -133,6 +133,7 @@ setwd("C:/Users/eva_s/OneDrive/MASTER/5. Semester_THESIS/data/data_breakingpoint
 save.image(file = "lda4_topics.RData")
 
 #Top 30 terms or words under each topic
+load("lda4_topics.RData")
 top30terms = as.data.frame(terms(lda,30))
 writexl::write_xlsx(top30terms, "top30terms4.xlsx")
 
