@@ -5,6 +5,7 @@ library(Rcpp)
 library(mctest)
 library(ggplot2)
 library(stats)
+library(patchwork)
 options(scipen=999) 
 
 ####PREPARE DATA####
@@ -159,15 +160,15 @@ compare_company_new = export_summs(fit_cocacola_new,fit_exxonmobil_new,fit_hm_ne
 
 ####ASSUMPTION TESTING####
 #COOKS
-par(mfrow=c(2,4))
-plot(fit_cocacola_new, 4, sub.caption = NA, main = "Coca Cola", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_exxonmobil_new, 4, sub.caption = NA,main = "ExxonMobil", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_hm_new, 4, sub.caption = NA,main = "H&M", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_ikea_new, 4, sub.caption = NA,main = "IKEA", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_nestle_new, 4, sub.caption = NA,main = "Nestle", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_shell_new, 4, sub.caption = NA,main = "Shell", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_unilever_new, 4, sub.caption = NA,main = "Unilever", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
-plot(fit_vw_new, 4, sub.caption = NA,main = "VW", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# par(mfrow=c(2,4))
+# plot(fit_cocacola_new, 4, sub.caption = NA, main = "Coca Cola", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_exxonmobil_new, 4, sub.caption = NA,main = "ExxonMobil", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_hm_new, 4, sub.caption = NA,main = "H&M", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_ikea_new, 4, sub.caption = NA,main = "IKEA", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_nestle_new, 4, sub.caption = NA,main = "Nestle", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_shell_new, 4, sub.caption = NA,main = "Shell", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_unilever_new, 4, sub.caption = NA,main = "Unilever", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
+# plot(fit_vw_new, 4, sub.caption = NA,main = "VW", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 2.5, id.n = 0)
 
 #extract top 10 highest cooks distance
 top10cooks_ikea = ikea[c(which(rownames(ikea) %in% names(sort(cooks.distance(fit_ikea_new), decreasing = T)[1:10]))),]
@@ -268,43 +269,144 @@ fit_ikea_new2 = lm(moral_outrage ~
                     followers + following, 
                   data = ikea2)
 
-#LINEARITY
-plot(fit_cocacola_new2, 1, sub.caption = NA, main = "Coca Cola", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0, lwd = 3)
-plot(fit_exxonmobil_new2, 1, sub.caption = NA,main = "ExxonMobil", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_hm_new2, 1, sub.caption = NA,main = "H&M", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_ikea_new2, 1, sub.caption = NA,main = "IKEA", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_nestle_new2, 1, sub.caption = NA,main = "Nestle", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_shell_new2, 1, sub.caption = NA,main = "Shell", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_unilever_new2, 1, sub.caption = NA,main = "Unilever", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_vw_new2, 1, sub.caption = NA,main = "VW", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# #LINEARITY
+# plot(fit_cocacola_new2, 1, sub.caption = NA, main = "Coca Cola", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0, lwd = 3)
+# plot(fit_exxonmobil_new2, 1, sub.caption = NA,main = "ExxonMobil", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_hm_new2, 1, sub.caption = NA,main = "H&M", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_ikea_new2, 1, sub.caption = NA,main = "IKEA", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_nestle_new2, 1, sub.caption = NA,main = "Nestle", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_shell_new2, 1, sub.caption = NA,main = "Shell", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_unilever_new2, 1, sub.caption = NA,main = "Unilever", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_vw_new2, 1, sub.caption = NA,main = "VW", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# 
+# #NORMALITY
+# plot(fit_cocacola_new2, 2, sub.caption = NA, main = "Coca Cola", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0, lwd = 3)
+# plot(fit_exxonmobil_new2, 2, sub.caption = NA,main = "ExxonMobil", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_hm_new2, 2, sub.caption = NA,main = "H&M", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_ikea_new2, 2, sub.caption = NA,main = "IKEA", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_nestle_new2, 2, sub.caption = NA,main = "Nestle", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_shell_new2, 2, sub.caption = NA,main = "Shell", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_unilever_new2, 2, sub.caption = NA,main = "Unilever", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_vw_new2, 2, sub.caption = NA,main = "VW", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# 
+# #HOMO
+# plot(fit_cocacola_new2, 3, sub.caption = NA, main = "Coca Cola", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0, lwd = 3)
+# plot(fit_exxonmobil_new2, 3, sub.caption = NA,main = "ExxonMobil", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_hm_new2, 3, sub.caption = NA,main = "H&M", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_ikea_new2, 3, sub.caption = NA,main = "IKEA", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_nestle_new2, 3, sub.caption = NA,main = "Nestle", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_shell_new2, 3, sub.caption = NA,main = "Shell", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_unilever_new2, 3, sub.caption = NA,main = "Unilever", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# plot(fit_vw_new2, 3, sub.caption = NA,main = "VW", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+# 
+# #MC
+# imcdiag(fit_cocacola_new2)
+# imcdiag(fit_exxonmobil_new2)
+# imcdiag(fit_hm_new2)
+# imcdiag(fit_ikea_new2)
+# imcdiag(fit_nestle_new2)
+# imcdiag(fit_shell_new2)
+# imcdiag(fit_unilever_new2)
+# imcdiag(fit_vw_new2)
 
-#NORMALITY
-plot(fit_cocacola_new2, 2, sub.caption = NA, main = "Coca Cola", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0, lwd = 3)
-plot(fit_exxonmobil_new2, 2, sub.caption = NA,main = "ExxonMobil", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_hm_new2, 2, sub.caption = NA,main = "H&M", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_ikea_new2, 2, sub.caption = NA,main = "IKEA", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_nestle_new2, 2, sub.caption = NA,main = "Nestle", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_shell_new2, 2, sub.caption = NA,main = "Shell", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_unilever_new2, 2, sub.caption = NA,main = "Unilever", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_vw_new2, 2, sub.caption = NA,main = "VW", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
 
-#HOMO
-plot(fit_cocacola_new2, 3, sub.caption = NA, main = "Coca Cola", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0, lwd = 3)
-plot(fit_exxonmobil_new2, 3, sub.caption = NA,main = "ExxonMobil", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_hm_new2, 3, sub.caption = NA,main = "H&M", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_ikea_new2, 3, sub.caption = NA,main = "IKEA", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_nestle_new2, 3, sub.caption = NA,main = "Nestle", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_shell_new2, 3, sub.caption = NA,main = "Shell", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_unilever_new2, 3, sub.caption = NA,main = "Unilever", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
-plot(fit_vw_new2, 3, sub.caption = NA,main = "VW", caption = NA, cex.lab = 1.5, cex.axis = 1.5, cex.main = 3, id.n = 0,lwd = 3)
+####VISUALIZE MEAN DIFFERENCES OF MORAL OUTRAGE PER COMPANY####
+means_topic_ikea = ikea %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% group_by(topic_individual) %>% 
+  summarise(mean = mean(moral_outrage))
+topic_plot_ikea = ikea %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% drop_na(topic_individual) %>%
+  ggplot(aes(y = moral_outrage, x = topic_individual)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topics IKEA") + 
+  stat_summary(fun="mean", size = .3)+ 
+  # geom_text(size = 3.5, data = means_topic_ikea, aes(label = round(mean,2), y = mean + 0.2))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
 
-#MC
-imcdiag(fit_cocacola_new2)
-imcdiag(fit_exxonmobil_new2)
-imcdiag(fit_hm_new2)
-imcdiag(fit_ikea_new2)
-imcdiag(fit_nestle_new2)
-imcdiag(fit_shell_new2)
-imcdiag(fit_unilever_new2)
-imcdiag(fit_vw_new2)
+means_topic_unilever = unilever %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% group_by(topic_individual) %>% 
+  summarise(mean = mean(moral_outrage))
+topic_plot_unilever = unilever %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% drop_na(topic_individual) %>%
+  ggplot(aes(y = moral_outrage, x = topic_individual)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topics Unilever") + 
+  stat_summary(fun="mean", size = .3)+ 
+  #geom_text(size = 3.5, data = means_topic_unilever, aes(label = round(mean,2), y = mean - 0.3))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
 
+means_topic_cocacola = cocacola %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% group_by(topic_individual) %>% 
+  summarise(mean = mean(moral_outrage))
+topic_plot_cocacola = cocacola %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% drop_na(topic_individual) %>%
+  ggplot(aes(y = moral_outrage, x = topic_individual)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topics Coca-Cola") + 
+  stat_summary(fun="mean", size = .3)+ 
+  #geom_text(size = 3.5, data = means_topic_cocacola, aes(label = round(mean,2), y = mean + 0.3))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
+
+means_topic_exxonmobil = exxonmobil %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% group_by(topic_individual) %>% 
+  summarise(mean = mean(moral_outrage))
+topic_plot_exxonmobil = exxonmobil %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% drop_na(topic_individual) %>%
+  ggplot(aes(y = moral_outrage, x = topic_individual)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topics ExxonMobil") + 
+  stat_summary(fun="mean", size = .3)+ 
+  #geom_text(size = 3.5, data = means_topic_exxonmobil, aes(label = round(mean,2), y = mean + 0.3))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
+
+means_topic_hm = hm %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% group_by(topic_individual) %>% 
+  summarise(mean = mean(moral_outrage))
+topic_plot_hm = hm %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% drop_na(topic_individual) %>%
+  ggplot(aes(y = moral_outrage, x = topic_individual)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topics H&M") + 
+  stat_summary(fun="mean", size = .3)+ 
+  #geom_text(size = 3.5, data = means_topic_hm, aes(label = round(mean,2), y = mean + 0.6))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
+
+means_topic_vw = vw %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% group_by(topic_individual) %>% 
+  summarise(mean = mean(moral_outrage))
+topic_plot_vw = vw %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% drop_na(topic_individual) %>%
+  ggplot(aes(y = moral_outrage, x = topic_individual)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topics VW") + 
+  stat_summary(fun="mean", size = .3)+ 
+  #geom_text(size = 3.5, data = means_topic_vw, aes(label = round(mean,2), y = mean + 0.4))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
+
+means_topic_nestle = nestle %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% group_by(topic_individual) %>% 
+  summarise(mean = mean(moral_outrage))
+topic_plot_nestle = nestle %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% drop_na(topic_individual) %>%
+  ggplot(aes(y = moral_outrage, x = topic_individual)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topics Nestle") + 
+  stat_summary(fun="mean", size = .3)+ 
+  #geom_text(size = 3.5, data = means_topic_nestle, aes(label = round(mean,2), y = mean + 0.3))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
+
+means_topic_shell = shell %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% group_by(topic_individual) %>% 
+  summarise(mean = mean(moral_outrage))
+topic_plot_shell = shell %>% filter(moral_outrage <= quantile(moral_outrage, 0.99)) %>% drop_na(topic_individual) %>%
+  ggplot(aes(y = moral_outrage, x = topic_individual)) + 
+  geom_boxplot(fill = "grey", outlier.shape = NA, fatten = 0.1) + xlab("") + ylab("Moral Outrage") +
+  theme_bw() + ggtitle("Topics Shell") + 
+  stat_summary(fun="mean", size = .3)+ 
+  #geom_text(size = 3.5, data = means_topic_shell, aes(label = round(mean,2), y = mean + 0.4))+
+  theme(plot.title = element_text(size=16),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12))
+
+
+topic_plot_cocacola + topic_plot_exxonmobil + topic_plot_hm + topic_plot_ikea +
+  topic_plot_nestle + topic_plot_shell + topic_plot_unilever + topic_plot_vw + plot_layout(nrow = 4)
