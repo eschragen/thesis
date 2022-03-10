@@ -59,16 +59,16 @@ colnames(stud_resids_df) = c("stud_res","fitted_values")
 
 ggplot(stud_resids_df, aes(x = fitted_values, y = stud_res)) + geom_point() +
   geom_hline(yintercept = 3, col = "red",lty = 2,lwd = 1) + xlab("Fitted Values") + ylab("Studentized Residuals") +
-  geom_text(x = .7, y = 3.3,label = "Threshold",color="red",size = 5.5)+
+  geom_text(x = .8, y = 3.4,label = "Threshold",color="red",size = 4, check_overlap = T)+
   theme(
     panel.spacing = unit(0.1, "lines"),
-    strip.text.x = element_text(size = 16),
-    plot.title = element_text(size=16), 
-    text = element_text(size = 18),
+    strip.text.x = element_text(size = 12),
+    plot.title = element_text(size=12)    , 
+    text = element_text(size = 12),
     panel.background = element_rect(fill = "transparent"),
     panel.grid.major.x =  element_blank(),
     panel.grid.major.y =  element_blank(),
-    panel.border = element_rect(colour = "black",fill=NA,size = 1)) 
+    panel.border = element_rect(colour = "black",fill=NA,size = .1)) 
 
 names = names(residuals(fit))
 cooks = as.data.frame(cooks.distance(fit))

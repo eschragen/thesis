@@ -131,7 +131,7 @@ df_cumulated %>% filter(conversation_id != "1438484481036492805") %>% #filter ou
   xlab("Day") + 
   geom_vline(xintercept = 7, linetype = "dashed",color = "red", size = 1.3) +
   scale_x_continuous(breaks = seq(0, 100, by = 10)) +
-  geom_text(x = 13, y = 10,label = "Considered\nTimeframe:\n7 Days",color="red",size = 5.5)+  
+  geom_text(x = 13, y = 10,label = "Considered\nTimeframe:\n7 Days",color="red",size = 5.5, check_overlap = T)+  
   theme(
     legend.position="none",
     panel.spacing = unit(0.1, "lines"),

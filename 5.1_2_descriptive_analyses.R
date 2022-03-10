@@ -96,13 +96,13 @@ postings_boolean %>%
       legend.position="right",
       panel.spacing = unit(0.1, "lines"),
       strip.text.x = element_text(size = 16),
-      plot.title = element_text(size=16), 
-      text=element_text(size=16,  family="sans")
+      plot.title = element_text(size=20), 
+      text=element_text(size=18,  family="sans")
       
     ) + facet_wrap(~company, nrow = 2) +
   geom_label(aes(label = paste(ratio,"%",sep = " ")),
              position = position_stack(vjust = 0.5),show.legend = FALSE) +
-  scale_fill_manual(values = c("darkgrey","lightgrey")) +
+  scale_fill_manual(values = c("#AFE1AF","darkgrey")) +
   theme(legend.position ="bottom",legend.title = element_blank())
 
 ###visualization moral outrage per company####
